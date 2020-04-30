@@ -1,0 +1,40 @@
+{
+    "customerId": "1234567",
+    "services": [
+        {
+            "name": "retail",
+            "label": "Bahir Inc Retail",
+            "servers": [
+                {
+                    "id": "1234",
+                    "name": "app01"
+                },
+                {
+                    "id": "2345",
+                    "name": "app02"
+                }
+            ]
+        },
+        {
+            "name": "dbcluster",
+            "label": "SQL Server Cluster",
+            "servers": [
+                {
+                    "id": "3456",
+                    "name": "db01"
+                },
+                {
+                    "id": "4567",
+                    "name": "db02"
+                }
+            ]
+        }
+    ],
+    "relations": [
+        {
+            "supporter": "dbcluster",
+            "consumer": "retail",
+            "type": "vital"
+        }
+    ]
+}

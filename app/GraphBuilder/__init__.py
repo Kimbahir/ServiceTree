@@ -3,6 +3,7 @@ from .Server import server
 from .Relation import relation
 from .ServiceTree import serviceTree
 from .Service import service
+import logging
 import json
 
 
@@ -14,7 +15,10 @@ class graphBuilder:
         self.serviceTree = serviceTree('', '', '')
         self.serviceTree.loadFromJSON(jsonInput)
 
-    def drawGraph(self):
+    def setServiceTree(self, serviceTree):
+        self.serviceTree = serviceTree
+
+    def drawGraph(self, filename=None, view=True):
         g = Digraph(comment=self.serviceTree.name)
         g.attr(rankdir='TB')
         g.attr(shape='circle')
@@ -26,26 +30,6 @@ class graphBuilder:
             print(label)
             g.node(service.name, shape='none', label=label,
                    URL="http://morticia.dk")
-            # label = "{" + f"{service.label}"
-
-            # for server in service.servers:
-            #     label += f"|{server.name}"
-
-            # label += "}"
-
-            # if service.type == "farm":
-            #     g.node(service.name, shape='record', label=label,
-            #            penwith="2.0", color="purple", style="filled", fillcolor="white")
-            # elif service.type == "apcluster":
-            #     g.node(service.name, shape='record',
-            #            label=label, penwith="2.0", color="navy")
-            # elif service.type == "aacluster":
-            #     g.node(service.name, shape='record',
-            #            label=label, penwith="2.0", color="blue")
-            # else:
-            #     g.node(service.name, shape='record', label=label)
-
-            # Setting the "User to first" - nvm
 
         for relation in self.serviceTree.relations:
             if relation.relationType == "vital":
@@ -55,11 +39,25 @@ class graphBuilder:
                 g.edge(relation.serviceSupporter.name,
                        relation.serviceConsumer.name)
             # relation.serviceConsumer.
-        print(g.source)
+
+        logging.debug(g.source)
+
         g.format = 'svg'
-        g.view()
+
+        if filename == None:
+            g.view()
+        else:
+            g.render(filename, view=view)
 
     def getHtmlTable(self, service):
+        """Returns the HTML form (compliant with graphviz) of a label
+
+        Arguments:
+            service {service} -- The Service containing the servers array
+
+        Returns:
+            str -- HTML representation of the label
+        """
         if service.type == "farm":
             headingfillcolor = "blue4"
             cellfillcolor = "cadetblue1"
@@ -82,7 +80,6 @@ class graphBuilder:
             cellfillcolor = "white"
 
         label = '<<table border="0" cellspacing="0">'
-        #label += f'<tr><td port="port0" bgcolor="{headingfillcolor}" color="{headingtextcolor}">{service.label}</td></tr>'
         label += f'<tr><td port="port0" border="1" bgcolor="{headingfillcolor}"><font color="{headingtextcolor}">{service.label}</font></td></tr>'
 
         for idx, server in enumerate(service.servers, start=1):

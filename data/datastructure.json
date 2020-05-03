@@ -5,7 +5,7 @@
     "services": [
         {
             "name": "retail",
-            "label": "Feriba Er Smuk",
+            "label": "Retail Application",
             "type": "farm",
             "servers": [
                 {
@@ -32,7 +32,7 @@
                     "name": "file01"
                 },
                 {
-                    "id": "b",
+                    "id": "a",
                     "name": "file02"
                 }
             ]

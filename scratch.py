@@ -18,6 +18,6 @@ with open('data/datastructure.json') as f:
 
 g = graphBuilder()
 g.loadServiceTreeFromJSON(data)
-g.drawGraph()
+g.drawGraph(filename='output/foo.gv', view=True)
 
 # print(st.getServiceTreeAsJSON())

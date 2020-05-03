@@ -18,20 +18,28 @@ except KeyError:
     pass
 
 
+@app.route("/", methods=["GET"])
+def home():
+    return "Service is running", 200
+
+
 @app.route("/drawtree", methods=["GET", "POST"])
 def drawTree():
-    logging.debug('Getting JSON from request object')
-    data = request.get_json()
+    try:
+        logging.debug('Getting JSON from request object')
+        data = request.get_json()
 
-    logging.debug(f'Building servicetree')
-    g = graphBuilder()
-    g.loadServiceTreeFromJSON(data)
+        logging.debug(f'Building servicetree')
+        g = graphBuilder()
+        g.loadServiceTreeFromJSON(data)
 
-    logging.debug(f'Writing/showing file')
-    g.drawGraph(filename='output/temp.gv', view=False)
+        logging.debug(f'Writing/showing file')
+        g.drawGraph(filename='output/temp.gv', view=False)
 
-    logging.debug(f'Sending file to user')
-    return send_file('output/temp.gv.svg', mimetype='image/svg+xml'), 200
+        logging.debug(f'Sending file to user')
+        return send_file('output/temp.gv.svg', mimetype='image/svg+xml'), 200
+    except Exception as e:
+        return "Something went bad... " + str(e), 500
     # return "OK", 200
 
 

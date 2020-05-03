@@ -6,7 +6,8 @@ COPY ./run-flask.py .
 COPY ./app ./app/
 COPY ./output ./output/
 COPY ./data ./data/
-RUN ls app
+RUN apt-get update
+RUN apt-get -y --force-yes install graphviz
 RUN pip install -r requirements.txt
 ENTRYPOINT [ "python" ]
 CMD ["run-flask.py"]

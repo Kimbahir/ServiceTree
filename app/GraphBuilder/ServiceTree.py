@@ -1,5 +1,4 @@
 import json
-#from app.GraphBuilder import relation
 from .Relation import relation
 from .Service import service
 from .Server import server

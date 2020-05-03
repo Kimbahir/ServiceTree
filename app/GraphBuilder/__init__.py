@@ -33,7 +33,7 @@ class graphBuilder:
             label = self.getHtmlTable(service)
 
             g.node(service.name, shape='none', label=label,
-                   URL="http://bahir.dk")
+                   URL="https://github.com/Kimbahir/ServiceTree")
 
         for relation in self.serviceTree.relations:
             if relation.relationType == "vital":

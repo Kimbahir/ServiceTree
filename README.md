@@ -3,9 +3,7 @@
 Purpose: To be able to build (somewhat interactive) service trees, without imposing on current database structure
 
 Example:
-:::image type="content" source="data/example.png" alt-text="Example image":::
 ![Example](data/example.png)
-![Example](/data/example.png)
 
 The services have different colors depending on their type. Current supported types:
 

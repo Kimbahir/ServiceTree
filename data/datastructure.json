@@ -5,8 +5,8 @@
     "services": [
         {
             "name": "retail",
-            "label": "Bahir Inc Retail",
-            "type": "n/a",
+            "label": "Feriba Er Smuk",
+            "type": "farm",
             "servers": [
                 {
                     "id": "1234",
@@ -15,13 +15,43 @@
                 {
                     "id": "2345",
                     "name": "app02"
+                },
+                {
+                    "id": "foo",
+                    "name": "app03"
+                }
+            ]
+        },
+        {
+            "name": "fileservice",
+            "label": "File cluster",
+            "type": "apcluster",
+            "servers": [
+                {
+                    "id": "a",
+                    "name": "file01"
+                },
+                {
+                    "id": "b",
+                    "name": "file02"
+                }
+            ]
+        },
+        {
+            "name": "batchservice",
+            "label": "Batch server",
+            "type": "n/a",
+            "servers": [
+                {
+                    "id": "batch",
+                    "name": "batch01"
                 }
             ]
         },
         {
             "name": "dbcluster",
             "label": "SQL Server Cluster",
-            "type": "n/a",
+            "type": "aacluster",
             "servers": [
                 {
                     "id": "3456",
@@ -39,6 +69,21 @@
             "supporter": "dbcluster",
             "consumer": "retail",
             "type": "vital"
+        },
+        {
+            "supporter": "dbcluster",
+            "consumer": "batchservice",
+            "type": "vital"
+        },
+        {
+            "supporter": "fileservice",
+            "consumer": "retail",
+            "type": "vital"
+        },
+        {
+            "supporter": "batchservice",
+            "consumer": "retail",
+            "type": "important"
         }
     ]
 }

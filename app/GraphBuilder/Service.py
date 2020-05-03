@@ -1,3 +1,6 @@
+from .Server import server
+
+
 class service:
     def __init__(self, name, label, serviceType) -> None:
         """Service Object holding list of servers included
@@ -19,7 +22,7 @@ class service:
             id {string} -- Internal id, can be a numeric id
             name {string} -- External label, will be shown on graph
         """
-        self.servers.append({'id': id, 'name': name})
+        self.servers.append(server(id, name))
 
     def clearServers(self) -> None:
         """Clears the serverlist - e.g. for resetting before re-adding servers

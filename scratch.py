@@ -1,5 +1,6 @@
 from app.GraphBuilder import service
 from app.GraphBuilder import serviceTree
+from app.GraphBuilder import graphBuilder
 import json
 
 s = service("123", "My service", "")
@@ -12,7 +13,11 @@ s.addServer("3", "Server3")
 
 with open('data/datastructure.json') as f:
     data = json.load(f)
-    st = serviceTree('', '', '')
-    st.loadFromJSON(data)
+    #st = serviceTree('', '', '')
+    # st.loadFromJSON(data)
 
-print(st.getServiceTreeAsJSON())
+g = graphBuilder()
+g.loadServiceTreeFromJSON(data)
+g.drawGraph()
+
+# print(st.getServiceTreeAsJSON())

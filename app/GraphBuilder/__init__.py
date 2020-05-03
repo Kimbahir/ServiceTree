@@ -19,26 +19,29 @@ class graphBuilder:
         self.serviceTree = serviceTree
 
     def drawGraph(self, filename=None, view=True):
+        """Draws the actual graph, based on the current service tree.
+
+        Keyword Arguments:
+            filename {str} -- Placement of output (default: {None})
+            view {bool} -- Is output to be presented to user? (default: {True})
+        """
         g = Digraph(comment=self.serviceTree.name)
         g.attr(rankdir='TB')
         g.attr(shape='circle')
 
-        #g.node('user', label='User')
-
         for service in self.serviceTree.services:
             label = self.getHtmlTable(service)
-            print(label)
+
             g.node(service.name, shape='none', label=label,
-                   URL="http://morticia.dk")
+                   URL="http://bahir.dk")
 
         for relation in self.serviceTree.relations:
             if relation.relationType == "vital":
                 g.edge(relation.serviceSupporter.name,
-                       relation.serviceConsumer.name, penwidth="2.0", color="red")
+                       relation.serviceConsumer.name, penwidth="3.0", color="blue")
             else:
                 g.edge(relation.serviceSupporter.name,
                        relation.serviceConsumer.name)
-            # relation.serviceConsumer.
 
         logging.debug(g.source)
 
@@ -75,7 +78,7 @@ class graphBuilder:
             celltextcolor = "black"
         else:
             headingfillcolor = "grey"
-            headingtextcolor = "black"
+            headingtextcolor = "white"
             celltextcolor = "black"
             cellfillcolor = "white"
 

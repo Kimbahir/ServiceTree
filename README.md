@@ -2,6 +2,16 @@
 
 Purpose: To be able to build (somewhat interactive) service trees, without imposing on current database structure
 
+Example:
+:::image type="content" source="data/example.png" alt-text="Example image":::
+
+The services have different colors depending on their type. Current supported types:
+
+* Farm - 2+ servers are delivering the service
+* AAcluster - 2 servers are delivering the service in an active/active configuration
+* APcluster - 2 servers are delivering the service in an active/passive configuration
+* Others - undefined, usually for stand-alone services
+
 ## Table of Contents
 
 * [How To](#how-to)
@@ -57,6 +67,10 @@ And to install required packages:
 And you should now be able to run the simple scratch test
 
     python scratch.py
+
+Or even better the full version
+
+    python run.py --file=data/datastructure.json --output=output/example.gv
 
 Enjoy!
 

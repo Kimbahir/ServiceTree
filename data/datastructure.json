@@ -1,9 +1,12 @@
 {
+    "name": "MyTree",
+    "label": "My overview tree",
     "customerId": "1234567",
     "services": [
         {
             "name": "retail",
             "label": "Bahir Inc Retail",
+            "type": "n/a",
             "servers": [
                 {
                     "id": "1234",
@@ -18,6 +21,7 @@
         {
             "name": "dbcluster",
             "label": "SQL Server Cluster",
+            "type": "n/a",
             "servers": [
                 {
                     "id": "3456",

@@ -3,11 +3,12 @@
 Purpose: To be able to build (somewhat interactive) service trees, without imposing on current database structure
 
 Example:
+
 ![Example](data/example.png)
 
 The services have different colors depending on their type. Current supported types:
 
-* Farm - 2+ servers are delivering the service
+* Farm - 2+ servers are delivering the service, in an all-active configuration
 * AAcluster - 2 servers are delivering the service in an active/active configuration
 * APcluster - 2 servers are delivering the service in an active/passive configuration
 * Others - undefined, usually for stand-alone services

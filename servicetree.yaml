@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: servicetree
+  namespace: default
+  labels:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/match-tag: "true"
+  annotations:
+    keel.sh/pollSchedule: "@every 1m"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: servicetree
+  template:
+    metadata:
+      labels:
+        app: servicetree
+    spec:
+      containers:
+      - name: servicetree
+        image: kimbahir/servicetree:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: servicetree 
+  namespace: default
+spec:
+  ports:
+  - name: http
+    targetPort: 8000
+    port: 80
+  selector:
+    app: servicetree
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: servicetree
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+
+spec:
+  rules:
+  - host: servicetree.bahir.dk 
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: servicetree
+          servicePort: http

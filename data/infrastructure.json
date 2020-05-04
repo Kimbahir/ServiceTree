@@ -1,0 +1,75 @@
+{
+    "name": "bahirinfrastructure",
+    "label": "Bahir Infrastructure",
+    "customerId": "",
+    "services": [
+        {
+            "name": "k8s",
+            "label": "Kubernetes Cluster",
+            "type": "farm",
+            "servers": [
+                {
+                    "id": "master",
+                    "name": "master"
+                },
+                {
+                    "id": "worker01",
+                    "name": "Worker A"
+                },
+                {
+                    "id": "worker02",
+                    "name": "Worker B"
+                }
+            ]
+        },
+        {
+            "name": "workstation",
+            "label": "Workstations",
+            "type": "none",
+            "servers": [
+                {
+                    "id": "morticia",
+                    "name": "Morticia"
+                },
+                {
+                    "id": "shirinak",
+                    "name": "Shirinak (motion)"
+                }
+            ]
+        },
+        {
+            "name": "docker",
+            "label": "DockerHub",
+            "type": "farm",
+            "servers": []
+        },
+        {
+            "name": "servicetree",
+            "label": "Service Tree Microservice",
+            "type": "none",
+            "servers": [
+                {
+                    "id": "container",
+                    "name": "kimbahir/servicetree:latest"
+                }
+            ]
+        }
+    ],
+    "relations": [
+        {
+            "supporter": "k8s",
+            "consumer": "servicetree",
+            "type": "vital"
+        },
+        {
+            "supporter": "workstation",
+            "consumer": "servicetree",
+            "type": "none"
+        },
+        {
+            "supporter": "docker",
+            "consumer": "k8s",
+            "type": "vital"
+        }
+    ]
+}

@@ -71,6 +71,11 @@
             "type": "vital"
         },
         {
+            "supporter": "batchservice",
+            "consumer": "dbcluster",
+            "type": "vital"
+        },
+        {
             "supporter": "dbcluster",
             "consumer": "batchservice",
             "type": "vital"

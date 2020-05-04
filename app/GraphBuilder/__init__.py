@@ -18,6 +18,30 @@ class graphBuilder:
     def setServiceTree(self, serviceTree):
         self.serviceTree = serviceTree
 
+    def getServiceArrayFromCSV(self, csv):
+        result = []
+
+        currentService = "absolutelynotgonnahappenever"
+        tmp = {}
+        for idx, record in enumerate(csv):
+            row = record.replace('\n', '').split(',')
+            if idx == 0 or row[0] != currentService:
+                currentService = row[0]
+                if idx != 0:
+                    result.append(tmp)
+                tmp = {
+                    "name": row[0],
+                    "label": row[0],
+                    "type": "none",
+                    "servers": []
+                }
+            srv = {"id": row[1], "name": row[2]}
+            tmp["servers"].append(srv)
+
+        result.append(tmp)
+
+        return result
+
     def drawGraph(self, filename=None, view=True):
         """Draws the actual graph, based on the current service tree.
 

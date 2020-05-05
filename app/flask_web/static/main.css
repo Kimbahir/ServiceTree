@@ -1,0 +1,17 @@
+/*
+body {
+  color: brown;
+  background-color: antiquewhite;
+}
+*/
+
+.bg-1 {
+    background-color: #1abc9c;
+    color: #ffffff;
+  }
+  
+  .container-fluid {
+    padding-top: 70px;
+    padding-bottom: 70px;
+  }
+  

@@ -2,3 +2,6 @@ graphviz
 argparse
 pytest
 flask
+flask_wtf
+wtforms
+flask_bcrypt

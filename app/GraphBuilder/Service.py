@@ -39,6 +39,9 @@ class service:
         r['name'] = self.name
         r['label'] = self.label
         r['type'] = self.type
-        r['servers'] = self.servers
+        servers = []
+        for s in self.servers:
+            servers.append(s.getServer())
+        r['servers'] = servers
 
         return r

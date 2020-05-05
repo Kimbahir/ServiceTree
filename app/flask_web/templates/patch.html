@@ -1,0 +1,24 @@
+{% extends "layout.html" %} {% block content %}
+<div class="content-section">
+
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <h1>Patch Services</h1>
+        <p>Enter the services and servers <em>that will replace the current services and servers</em>, with
+            comma separated input. <i>Remember to sort by services</i></p>
+        <p>Format is: [service],[server id],[server name]</p>
+        <div class="form-group">
+            <label for="csv">Paste CSV input:</label>
+            {{ form.csv(class="form-control", rows="15") }}
+        </div>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+
+
+</div>
+</form>
+
+
+</div>
+{% endblock content %}

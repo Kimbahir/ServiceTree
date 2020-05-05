@@ -1,0 +1,14 @@
+{% extends "layout.html" %} {% block content %}
+<div class="row">
+
+    <div class="col">
+        <h1>Welcome to ServiceTree</h1>
+        <p>Instructions on use:</p>
+        {{ form.hidden_tag() }}
+        {% if session['datastructure'] %}
+        {{ session['datastructure']}}
+        {% endif %}
+    </div>
+
+</div>
+{% endblock content %}

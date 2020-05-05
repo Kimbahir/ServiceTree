@@ -24,12 +24,21 @@ class serviceTree:
         raise Exception(
             f"getServiceFromName didn't find a service matching '{name}'")
 
+    def addRelation(self, provider, consumer, relationType):
+
+        rel = relation(provider, consumer, relationType)
+
+        self.relations.append(rel)
+
     def loadFromJSON(self, jsonInput: json):
         """Loading a full service tree with children based on JSON input
 
         Arguments:
             jsonInput {json} -- JSON input following schema
         """
+        logging.debug(f"JSON input to loadFromJSON is: {jsonInput}")
+        if type(jsonInput) == str:
+            jsonInput = json.loads(jsonInput)
         self.name = jsonInput['name']
         self.label = jsonInput['label']
         self.customerId = jsonInput['customerId']
@@ -48,8 +57,8 @@ class serviceTree:
 
         self.relations = []
         for r in jsonInput['relations']:
-            self.relations.append(relation(self.getServiceFromName(r['supporter']), self.getServiceFromName(r['consumer']), r['type'])
-                                  )
+            self.relations.append(
+                relation(r['supporter'], r['consumer'], r['type']))
 
         logging.debug('Load from JSON: Relations completed')
         logging.info('Load from JSON: Loaded')
@@ -71,10 +80,17 @@ class serviceTree:
 
         root['services'] = services
 
+        #root['services'] = self.services
+
+        logging.debug('Added services')
+
         relations = []
         for r in self.relations:
             relations.append(r.getRelation())
 
         root['relations'] = relations
+
+#        root['relations'] = self.relations
+        logging.debug('Added relations')
 
         return root

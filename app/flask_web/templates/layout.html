@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css')}}" />
+    {% if title %}
+    <title>{{ title }} (servicetreebahir.dk)</title>
+    {% else %}
+    <title>bahir.dk</title>
+    {% endif %}
+</head>
+
+<body>
+    <div class="container">
+        <ul class="nav nav-tabs bg-light">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('load') }}">Load</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('patch') }}">Patch</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('relate') }}">Relate</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('view') }}">View</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('persist') }}">Persist</a>
+            </li>
+        </ul>
+        <br />
+    </div>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock content %}
+    </div>
+</body>
+
+</html>

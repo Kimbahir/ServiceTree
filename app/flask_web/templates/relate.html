@@ -1,0 +1,24 @@
+{% extends "layout.html" %} {% block content %}
+<div class="content-section">
+
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        {{ form.csrf_token }}
+        <h1>Relate Services</h1>
+        <p>Select a provider and a consumer and create relation</p>
+        <div class="form-group">
+            <label for="provider">Provider:</label>
+            {{ form.provider(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <label for="consumer">Consumer:</label>
+            {{ form.consumer(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+
+</div>
+{% endblock content %}

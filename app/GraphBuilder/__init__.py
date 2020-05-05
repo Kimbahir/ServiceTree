@@ -23,7 +23,9 @@ class graphBuilder:
 
         currentService = "absolutelynotgonnahappenever"
         tmp = {}
-        for idx, record in enumerate(csv):
+        for idx, record in enumerate(csv.split('\r')):
+            logging.debug(record)
+
             row = record.replace('\n', '').split(',')
             if idx == 0 or row[0] != currentService:
                 currentService = row[0]
@@ -35,6 +37,7 @@ class graphBuilder:
                     "type": "none",
                     "servers": []
                 }
+
             srv = {"id": row[1], "name": row[2]}
             tmp["servers"].append(srv)
 
@@ -61,11 +64,11 @@ class graphBuilder:
 
         for relation in self.serviceTree.relations:
             if relation.relationType == "vital":
-                g.edge(relation.serviceSupporter.name,
-                       relation.serviceConsumer.name, penwidth="3.0", color="blue")
+                g.edge(relation.serviceSupporter,
+                       relation.serviceConsumer, penwidth="3.0", color="blue")
             else:
-                g.edge(relation.serviceSupporter.name,
-                       relation.serviceConsumer.name)
+                g.edge(relation.serviceSupporter,
+                       relation.serviceConsumer)
 
         logging.debug(g.source)
 

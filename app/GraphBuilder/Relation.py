@@ -5,4 +5,4 @@ class relation:
         self.relationType = relationType
 
     def getRelation(self):
-        return {'supporter': self.serviceSupporter.name, 'consumer': self.serviceConsumer.name, 'type': self.relationType}
+        return {'supporter': self.serviceSupporter, 'consumer': self.serviceConsumer, 'type': self.relationType}

@@ -76,7 +76,7 @@ class serviceTree:
 
         services = []
         for s in self.services:
-            services.append(s.getService())
+            services.append(s)
 
         root['services'] = services
 

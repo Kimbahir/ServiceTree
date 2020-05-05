@@ -6,6 +6,8 @@ import logging
 import json
 import os
 from app.flask_web.forms import HomeForm, LoadForm, PatchForm, RelateForm
+from io import BytesIO
+from io import StringIO
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'df61f5fe12eb40792e85b284ead07d51'
@@ -81,7 +83,6 @@ def relate():
         g.serviceTree.addRelation(label_provider, label_consumer, "vital")
         logging.debug('Added relation')
 
-        logging.debug(g.serviceTree.relations)
         logging.debug(f'Output is {g.serviceTree.getServiceTreeAsJSON()}')
         session['datastructure'] = g.serviceTree.getServiceTreeAsJSON()
         return redirect(url_for('home')), 302
@@ -92,7 +93,22 @@ def relate():
 
 @app.route("/persist", methods=["GET"])
 def persist():
-    return render_template('persist.html'), 200
+    # proxy = StringIO
+
+    # proxy.write(json.dumps(session['datastructure']))
+
+    # mem = BytesIO
+    # mem.write(proxy.getvalue().encode('utf-8'))
+    # mem.seek(0)
+
+    b = BytesIO()
+
+    logging.debug(f"writing content: {session['datastructure']}")
+    logging.error("WRAG")
+    b.write(session['datastructure'])
+    b.seek(0)
+
+    return send_file(b, as_attachment=True, attachment_filename='data.json', mimetype='text/json')
     # return "Service is running", 200
 
 

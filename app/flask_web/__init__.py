@@ -63,7 +63,7 @@ def relate():
 
     services = []
     for s in g.serviceTree.services:
-        services.append(s.label)
+        services.append(s['label'])
 
     form.consumer.choices = services
     form.provider.choices = services
@@ -103,9 +103,9 @@ def persist():
 
     b = BytesIO()
 
-    logging.debug(f"writing content: {session['datastructure']}")
-    logging.error("WRAG")
-    b.write(session['datastructure'])
+    datastructure = json.dumps(session['datastructure'])
+
+    b.write(datastructure.encode('utf-8'))
     b.seek(0)
 
     return send_file(b, as_attachment=True, attachment_filename='data.json', mimetype='text/json')
@@ -114,7 +114,13 @@ def persist():
 
 @app.route("/view", methods=["GET"])
 def view():
-    return render_template('view.html'), 200
+    g = graphBuilder()
+    g.loadServiceTreeFromJSON(session['datastructure'])
+
+    b = g.drawGraphForWeb()
+    b.seek(0)
+    return send_file(b, as_attachment=True, attachment_filename='servicetree.gv.pdf', mimetype='application/pdf')
+    # return render_template('view.html'), 200
     # return "Service is running", 200
 
 

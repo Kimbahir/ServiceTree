@@ -26,7 +26,7 @@ class serviceTree:
 
     def addRelation(self, provider, consumer, relationType):
 
-        rel = relation(provider, consumer, relationType)
+        rel = {'supporter': provider, 'consumer': consumer, 'type': relationType}
 
         self.relations.append(rel)
 
@@ -39,26 +39,17 @@ class serviceTree:
         logging.debug(f"JSON input to loadFromJSON is: {jsonInput}")
         if type(jsonInput) == str:
             jsonInput = json.loads(jsonInput)
+
         self.name = jsonInput['name']
         self.label = jsonInput['label']
         self.customerId = jsonInput['customerId']
 
         logging.debug('Load from JSON: Core completed')
-        self.services = []
-
-        for s in jsonInput['services']:
-            svc = service(s['name'], s['label'], s['type'])
-            if len(s['servers']) > 0:
-                for server in s['servers']:
-                    svc.addServer(server['id'], server['name'])
-            self.services.append(svc)
+        self.services = jsonInput['services']
 
         logging.debug('Load from JSON: Services completed')
 
-        self.relations = []
-        for r in jsonInput['relations']:
-            self.relations.append(
-                relation(r['supporter'], r['consumer'], r['type']))
+        self.relations = jsonInput['relations']
 
         logging.debug('Load from JSON: Relations completed')
         logging.info('Load from JSON: Loaded')
@@ -74,19 +65,13 @@ class serviceTree:
         root['label'] = self.label
         root['customerId'] = self.customerId
 
-        services = []
-        for s in self.services:
-            services.append(s)
+        services = self.services
 
         root['services'] = services
 
-        #root['services'] = self.services
-
         logging.debug('Added services')
 
-        relations = []
-        for r in self.relations:
-            relations.append(r.getRelation())
+        relations = self.relations
 
         root['relations'] = relations
 

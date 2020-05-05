@@ -5,6 +5,7 @@ from .ServiceTree import serviceTree
 from .Service import service
 import logging
 import json
+from io import BytesIO
 
 
 class graphBuilder:
@@ -45,6 +46,39 @@ class graphBuilder:
 
         return result
 
+    def drawGraphForWeb(self):
+        """Draws the actual graph, based on the current service tree.
+
+        Keyword Arguments:
+            filename {str} -- Placement of output (default: {None})
+            view {bool} -- Is output to be presented to user? (default: {True})
+        """
+        g = Digraph(comment=self.serviceTree.name)
+        g.attr(rankdir='TB')
+        g.attr(shape='circle')
+
+        for service in self.serviceTree.services:
+            label = self.getHtmlTable(service)
+
+            g.node(service['name'], shape='none', label=label,
+                   URL="https://github.com/Kimbahir/ServiceTree")
+
+        for relation in self.serviceTree.relations:
+            if relation['type'] == "vital":
+                g.edge(relation['supporter'],
+                       relation['consumer'], penwidth="3.0", color="blue")
+            else:
+                g.edge(relation['supporter'],
+                       relation['consumer'])
+
+        logging.debug(g.source)
+
+        g.format = 'pdf'
+
+        b = BytesIO()
+        b.write(g.pipe())
+        return b
+
     def drawGraph(self, filename=None, view=True):
         """Draws the actual graph, based on the current service tree.
 
@@ -59,16 +93,16 @@ class graphBuilder:
         for service in self.serviceTree.services:
             label = self.getHtmlTable(service)
 
-            g.node(service.name, shape='none', label=label,
+            g.node(service['name'], shape='none', label=label,
                    URL="https://github.com/Kimbahir/ServiceTree")
 
         for relation in self.serviceTree.relations:
-            if relation.relationType == "vital":
-                g.edge(relation.serviceSupporter,
-                       relation.serviceConsumer, penwidth="3.0", color="blue")
+            if relation['type'] == "vital":
+                g.edge(relation['supporter'],
+                       relation['consumer'], penwidth="3.0", color="blue")
             else:
-                g.edge(relation.serviceSupporter,
-                       relation.serviceConsumer)
+                g.edge(relation['supporter'],
+                       relation['consumer'])
 
         logging.debug(g.source)
 
@@ -88,17 +122,18 @@ class graphBuilder:
         Returns:
             str -- HTML representation of the label
         """
-        if service.type == "farm":
+        #service = json.loads(service)
+        if service['type'] == "farm":
             headingfillcolor = "blue4"
             cellfillcolor = "cadetblue1"
             headingtextcolor = "white"
             celltextcolor = "black"
-        elif service.type == "aacluster":
+        elif service['type'] == "aacluster":
             headingfillcolor = "blue"
             cellfillcolor = "azure2"
             headingtextcolor = "white"
             celltextcolor = "black"
-        elif service.type == "apcluster":
+        elif service['type'] == "apcluster":
             headingfillcolor = "dodgerblue1"
             cellfillcolor = "azure"
             headingtextcolor = "white"
@@ -109,11 +144,12 @@ class graphBuilder:
             celltextcolor = "black"
             cellfillcolor = "white"
 
+        logging.debug(f'service is {service}')
         label = '<<table border="0" cellspacing="0">'
-        label += f'<tr><td port="port0" border="1" bgcolor="{headingfillcolor}"><font color="{headingtextcolor}">{service.label}</font></td></tr>'
+        label += f'<tr><td port="port0" border="1" bgcolor="{headingfillcolor}"><font color="{headingtextcolor}">{service["label"]}</font></td></tr>'
 
-        for idx, server in enumerate(service.servers, start=1):
-            label += f'<tr><td port="port{idx}" border="1" bgcolor="{cellfillcolor}"><font color="{celltextcolor}">{server.name}</font></td></tr>'
+        for idx, server in enumerate(service['servers'], start=1):
+            label += f'<tr><td port="port{idx}" border="1" bgcolor="{cellfillcolor}"><font color="{celltextcolor}">{server["name"]}</font></td></tr>'
 
         label += '</table>>'
 

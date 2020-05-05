@@ -38,7 +38,7 @@ class serviceTree:
         """
         logging.debug(f"JSON input to loadFromJSON is: {jsonInput}")
         if type(jsonInput) == str:
-            jsonInput = json.loads(jsonInput)
+            jsonInput = json.loads(jsonInput.replace('\'', '\"'))
 
         self.name = jsonInput['name']
         self.label = jsonInput['label']
@@ -46,6 +46,10 @@ class serviceTree:
 
         logging.debug('Load from JSON: Core completed')
         self.services = jsonInput['services']
+        for s in self.services:
+            if s['name'] == '':
+                s['name'] = 'n/a'
+                s['label'] = 'n/a'
 
         logging.debug('Load from JSON: Services completed')
 

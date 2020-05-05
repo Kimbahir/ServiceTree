@@ -12,4 +12,4 @@ if __name__ == "__main__":
     except KeyError:
         pass
 
-    app.run(debug=debug_flag, host="0.0.0.0", port="80")
+    app.run(debug=debug_flag, host="0.0.0.0", port="8000")

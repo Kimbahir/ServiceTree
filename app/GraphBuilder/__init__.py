@@ -1,11 +1,9 @@
 from graphviz import Digraph
-from .Server import server
-from .Relation import relation
 from .ServiceTree import serviceTree
-from .Service import service
 import logging
 import json
 from io import BytesIO
+import base64
 
 
 class graphBuilder:
@@ -46,12 +44,11 @@ class graphBuilder:
 
         return result
 
-    def drawGraphForWeb(self):
+    def drawGraphForWeb(self, format='pdf'):
         """Draws the actual graph, based on the current service tree.
 
         Keyword Arguments:
-            filename {str} -- Placement of output (default: {None})
-            view {bool} -- Is output to be presented to user? (default: {True})
+            format {str} -- graphviz output format (default: {pdf})
         """
         g = Digraph(comment=self.serviceTree.name)
         g.attr(rankdir='TB')
@@ -73,10 +70,11 @@ class graphBuilder:
 
         logging.debug(g.source)
 
-        g.format = 'pdf'
+        g.format = format
 
         b = BytesIO()
         b.write(g.pipe())
+        logging.debug('Data written')
         return b
 
     def drawGraph(self, filename=None, view=True):

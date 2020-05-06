@@ -24,7 +24,12 @@ class PatchForm(FlaskForm):
 
 
 class RelateForm(FlaskForm):
-    provider = SelectField("Provider", validators=[Optional()])
-    consumer = SelectField("Consumer", validators=[Optional()])
-    #vital = BooleanField("Vital")
+    provider = SelectField("Provider", coerce=str)
+    consumer = SelectField("Consumer", coerce=str)
+    vital = BooleanField("Vital")
+    submit = SubmitField("Submit")
+
+
+class DetachForm(FlaskForm):
+    relation = SelectField("Relation", validators=[DataRequired()])
     submit = SubmitField("Submit")

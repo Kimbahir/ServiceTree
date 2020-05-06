@@ -1,11 +1,11 @@
 
-from flask import Flask, render_template, url_for, request, send_file, session, redirect
+from flask import Flask, render_template, url_for, request, send_file, session, redirect, flash
 from flask_bcrypt import Bcrypt
 from app.GraphBuilder import graphBuilder
 import logging
 import json
 import os
-from app.flask_web.forms import HomeForm, LoadForm, PatchForm, RelateForm
+from app.flask_web.forms import HomeForm, LoadForm, PatchForm, RelateForm, DetachForm
 from io import BytesIO
 from io import StringIO
 
@@ -22,7 +22,12 @@ def home():
     if "datastructure" in session.keys():
         form.view.data = session['datastructure']
 
-    return render_template('home.html', form=form, title="Home"), 200
+    if type(session['datastructure']) == str:
+        s = json.loads(session['datastructure'])
+    else:
+        s = session['datastructure']
+    s = json.dumps(s, indent=4)
+    return render_template('home.html', form=form, title="Home", s=s), 200
 
 
 @app.route("/load", methods=["GET", "POST"])
@@ -58,36 +63,85 @@ def patch():
 @app.route("/relate", methods=["GET", "POST"])
 def relate():
     form = RelateForm()
+
     g = graphBuilder()
     g.loadServiceTreeFromJSON(session['datastructure'])
 
     services = []
     for s in g.serviceTree.services:
-        services.append(s['label'])
+        services.append((s['name'], s['label']))
 
     form.consumer.choices = services
+
     form.provider.choices = services
 
     # logging.debug(f'Errors: {}')
-    if form.is_submitted():
+    logging.debug(
+        f'ready to validate on submit with provider: {form.provider.data} and consumer: {form.consumer.data}')
+    if form.validate_on_submit():
         logging.debug('Is validated on submit')
         label_provider = form.provider.data
         label_consumer = form.consumer.data
-        # if form.vital.data:
-        #     vital = "vital"
-        # else:
-        #     vital = "important"
+
+        if form.vital.data:
+            vital = "vital"
+        else:
+            vital = "important"
 
         logging.debug(
             f'Trying to add relations between {label_provider} and {label_consumer}')
-        g.serviceTree.addRelation(label_provider, label_consumer, "vital")
+        g.serviceTree.addRelation(
+            form.provider.data, form.consumer.data, vital)
         logging.debug('Added relation')
 
         logging.debug(f'Output is {g.serviceTree.getServiceTreeAsJSON()}')
         session['datastructure'] = g.serviceTree.getServiceTreeAsJSON()
-        return redirect(url_for('home')), 302
 
+        flash(
+            f"Relation {form.provider.data} --> {form.consumer.data} created!", "success")
+        return redirect(url_for('relate')), 302
+
+    #chart_output = g.drawGraphForDynamicWeb()
+    # return render_template('relate.html', form=form, title="Relate", chart_output=chart_output), 200
     return render_template('relate.html', form=form, title="Relate"), 200
+    # return "Service is running", 200
+
+
+@app.route("/detach", methods=["GET", "POST"])
+def detach():
+    form = DetachForm()
+
+    g = graphBuilder()
+    g.loadServiceTreeFromJSON(session['datastructure'])
+
+    choices = []
+    for r in g.serviceTree.relations:
+        choices.append((f'{r["supporter"]} --> {r["consumer"]}',
+                        f'{g.serviceTree.getServiceLabelFromName(r["supporter"])} --> {g.serviceTree.getServiceLabelFromName(r["consumer"])}'))
+
+    form.relation.choices = choices
+
+    # logging.debug(f'Errors: {}')
+    logging.debug(
+        f'ready to validate on submit with relation: {form.relation.data} ')
+    if form.validate_on_submit():
+        logging.debug('Is validated on submit')
+
+        for idx, r in enumerate(g.serviceTree.relations):
+            if f'{r["supporter"]} --> {r["consumer"]}' == form.relation.data:
+                g.serviceTree.relations.pop(idx)
+                break
+
+        logging.debug('Removed relation')
+
+        logging.debug(f'Output is {g.serviceTree.getServiceTreeAsJSON()}')
+        session['datastructure'] = g.serviceTree.getServiceTreeAsJSON()
+
+        flash(f"Relation {form.relation.data} deleted!", "success")
+
+        return redirect(url_for('detach')), 302
+
+    return render_template('detach.html', form=form, title="Relate"), 200
     # return "Service is running", 200
 
 
@@ -124,6 +178,19 @@ def view():
     # return "Service is running", 200
 
 
+@app.route("/viewonly", methods=["GET"])
+def viewonly():
+    g = graphBuilder()
+    g.loadServiceTreeFromJSON(session['datastructure'])
+
+    b = g.drawGraphForWeb()
+    b.seek(0)
+    # as_attachment=True, attachment_filename='servicetree.gv.pdf',
+    return send_file(b,  mimetype='application/pdf')
+    # return render_template('view.html'), 200
+    # return "Service is running", 200
+
+
 @app.route("/drawtree", methods=["GET", "POST"])
 def drawTree():
     try:
@@ -142,6 +209,28 @@ def drawTree():
     except Exception as e:
         return "Something went bad... " + str(e), 500
     # return "OK", 200
+
+
+# @app.route("/showpicture", methods=['GET'])
+# def showpicture():
+
+#     b = BytesIO()
+
+#     logging.debug('do we get here?')
+
+#     g = graphBuilder()
+
+#     logging.debug('Trying to get session')
+
+#     g.loadServiceTreeFromJSON(session['datastructure'])
+
+#     logging.debug('Creating output')
+
+#     chart_output = g.drawGraphForDynamicWeb()
+
+#     logging.debug('Ready to return')
+
+#     return render_template('svg.html', chart_output=chart_output)
 
 
 # app.run(debug=debug_flag, host="0.0.0.0", port="8000")

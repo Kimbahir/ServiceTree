@@ -1,7 +1,7 @@
 import json
-from .Relation import relation
-from .Service import service
-from .Server import server
+# from .Relation import relation
+# from .Service import service
+# from .Server import server
 import logging
 
 
@@ -14,15 +14,25 @@ class serviceTree:
         self.label = label
         self.customerId = customerId
 
-    def getServiceFromName(self, name):
+    def getServiceNameFromLabel(self, label):
         for s in self.services:
-            if s.name == name:
-                return s
+            if s['label'] == label:
+                return s['name']
 
         logging.critical(
-            f"getServiceFromName didn't find a service matching '{name}'")
+            f"getServiceNameFromLabel didn't find a service matching '{label}'")
         raise Exception(
-            f"getServiceFromName didn't find a service matching '{name}'")
+            f"getServiceNameFromLabel didn't find a service matching '{label}'")
+
+    def getServiceLabelFromName(self, name):
+        for s in self.services:
+            if s['name'] == name:
+                return s['label']
+
+        logging.critical(
+            f"getServiceLabelFromName didn't find a service matching '{name}'")
+        raise Exception(
+            f"getServiceLabelFromName didn't find a service matching '{name}'")
 
     def addRelation(self, provider, consumer, relationType):
 
@@ -32,6 +42,7 @@ class serviceTree:
 
     def loadFromJSON(self, jsonInput: json):
         """Loading a full service tree with children based on JSON input
+        Primarily functions to ensure some sort of quality control
 
         Arguments:
             jsonInput {json} -- JSON input following schema
@@ -45,6 +56,7 @@ class serviceTree:
         self.customerId = jsonInput['customerId']
 
         logging.debug('Load from JSON: Core completed')
+
         self.services = jsonInput['services']
         for s in self.services:
             if s['name'] == '':
@@ -60,6 +72,7 @@ class serviceTree:
 
     def getServiceTreeAsJSON(self):
         """Returns a JSON representation of the service tree
+        Primarily functions to ensure some sort of quality control
 
         Returns:
             json -- Full JSON representation of the service tree
@@ -69,17 +82,12 @@ class serviceTree:
         root['label'] = self.label
         root['customerId'] = self.customerId
 
-        services = self.services
-
-        root['services'] = services
+        root['services'] = self.services
 
         logging.debug('Added services')
 
-        relations = self.relations
+        root['relations'] = self.relations
 
-        root['relations'] = relations
-
-#        root['relations'] = self.relations
         logging.debug('Added relations')
 
         return root

@@ -17,6 +17,7 @@ The services have different colors depending on their type. Current supported ty
 
 * [How To](#how-to)
 * [Install guide](#install-guide)
+* [Install guide for Containers](#install-guide-for-containers)
 * [Important links](#important-links)
 
 ## How to
@@ -74,6 +75,18 @@ Or even better the full version
     python run.py --file=data/datastructure.json --output=output/example.gv
 
 Enjoy!
+
+*[Table of Contents](#table-of-contents)*
+
+## Install guide for Containers
+
+It is also possible to leverage as containers - currently it is all in the form of a self-contained container,
+readily available from kimbahir/servicetree:latest, and without any special configuration. It is listening on
+port 8000 as can be read from the Dockerfile.
+
+There are a template in servicetree.yaml that includes keel.sh for auto deployment.
+
+Use of the website is maintained in the home() function, and displayed for the user
 
 *[Table of Contents](#table-of-contents)*
 

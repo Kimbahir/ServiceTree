@@ -19,14 +19,17 @@ logging.basicConfig(level=logging.DEBUG, format='%(levelname)s:\t%(message)s')
 @app.route("/", methods=["GET"])
 def home():
     form = HomeForm()
+    
+    s = ""
+
     if "datastructure" in session.keys():
         form.view.data = session['datastructure']
-
-    if type(session['datastructure']) == str:
-        s = json.loads(session['datastructure'])
-    else:
-        s = session['datastructure']
-    s = json.dumps(s, indent=4)
+        
+        if type(session['datastructure']) == str:
+            s = json.loads(session['datastructure'])
+        else:
+            s = session['datastructure']
+        s = json.dumps(s, indent=4)
     return render_template('home.html', form=form, title="Home", s=s), 200
 
 
@@ -42,6 +45,10 @@ def load():
 
 @app.route("/patch", methods=["GET", "POST"])
 def patch():
+    if "datastructure" not in session.keys():
+        flash('Please load a datastructure before use','info')
+        return redirect(url_for('load')), 302
+
     form = PatchForm()
     if form.validate_on_submit():
         g = graphBuilder()
@@ -62,6 +69,10 @@ def patch():
 
 @app.route("/relate", methods=["GET", "POST"])
 def relate():
+    if "datastructure" not in session.keys():
+        flash('Please load a datastructure before use','info')
+        return redirect(url_for('load')), 302
+
     form = RelateForm()
 
     g = graphBuilder()
@@ -109,6 +120,10 @@ def relate():
 
 @app.route("/detach", methods=["GET", "POST"])
 def detach():
+    if "datastructure" not in session.keys():
+        flash('Please load a datastructure before use','info')
+        return redirect(url_for('load')), 302
+
     form = DetachForm()
 
     g = graphBuilder()
@@ -147,6 +162,10 @@ def detach():
 
 @app.route("/persist", methods=["GET"])
 def persist():
+    if "datastructure" not in session.keys():
+        flash('Please load a datastructure before use','info')
+        return redirect(url_for('load')), 302
+
     # proxy = StringIO
 
     # proxy.write(json.dumps(session['datastructure']))
@@ -168,6 +187,10 @@ def persist():
 
 @app.route("/view", methods=["GET"])
 def view():
+    if "datastructure" not in session.keys():
+        flash('Please load a datastructure before use','info')
+        return redirect(url_for('load')), 302
+
     g = graphBuilder()
     g.loadServiceTreeFromJSON(session['datastructure'])
 

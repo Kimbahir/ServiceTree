@@ -43,6 +43,7 @@ def load():
                 flash('You must add a datastructure', 'danger')
             else:
                 session['datastructure'] = form.datastructure.data
+                flash('Datastructure loaded','success')
                 return redirect(url_for('home')), 302
         elif form.empty.data:
             flash('Empty template loaded','info')

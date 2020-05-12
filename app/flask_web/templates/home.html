@@ -4,6 +4,34 @@
     <div class="col">
         <h1>Welcome to ServiceTree</h1>
         <p>Instructions on use:</p>
+        <p>
+            ServiceTree is made for mapping services and their relation, without having 
+            to modify the underlying ITSM systems. The only data that are outside ITSM 
+            systems are the relations, and they will reside in the json file. The output 
+            can be returned as a full json file and/or a PDF file. 
+        </p>
+        <p>
+            <em>Load: </em>Load a json input into the text area or load an example. Note, 
+            until you press submit, nothing happens :)
+        </p>
+        <p>
+            <em>Patch: </em>Load a CSV content, for when you need to update the servers 
+            and/or services. Note, it will overwrite current server registrations!
+        </p>
+        <p>
+            <em>Relate: </em>Create relations between services, by selecting two services 
+            and attaching them
+        </p>
+        <p>
+            <em>Detach: </em>Select a relation and remove said relation
+        </p>
+        <p>
+            <em>View: </em>Downloads the PDF representation of the servicetree
+        </p>
+        <p>
+            <em>Persist: </em>Downloads the JSON representation of the servicetree
+        </p>
+        <p>&nbsp;</p>
         {{ form.hidden_tag() }}
         {% if s %}
         <pre>{{ s }}</pre>

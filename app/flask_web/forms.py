@@ -14,7 +14,11 @@ class HomeForm(FlaskForm):
 
 
 class LoadForm(FlaskForm):
-    datastructure = TextAreaField("Datastructure", validators=[DataRequired()])
+    #datastructure = TextAreaField("Datastructure", validators=[DataRequired()])
+    datastructure = TextAreaField("Datastructure")
+    empty = SubmitField("Empty template")
+    example1 = SubmitField("Example 1")
+    example2 = SubmitField("Example 2")
     submit = SubmitField("Submit")
 
 

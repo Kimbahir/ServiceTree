@@ -2,6 +2,7 @@
 from flask import Flask, render_template, url_for, request, send_file, session, redirect, flash
 from flask_bcrypt import Bcrypt
 from app.GraphBuilder import graphBuilder
+from app.flask_web.examples import empty, example1, example2
 import logging
 import json
 import os
@@ -37,8 +38,22 @@ def home():
 def load():
     form = LoadForm()
     if form.validate_on_submit():
-        session['datastructure'] = form.datastructure.data
-        return redirect(url_for('home')), 302
+        if form.submit.data:
+            if form.datastructure.data == "":
+                flash('You must add a datastructure', 'danger')
+            else:
+                session['datastructure'] = form.datastructure.data
+                return redirect(url_for('home')), 302
+        elif form.empty.data:
+            flash('Empty template loaded','info')
+            form.datastructure.data = json.dumps(empty, indent=4)
+        elif form.example1.data:
+            flash('Example 1 loaded','info')
+            form.datastructure.data = json.dumps(example1, indent=4)
+        elif form.example2.data:
+            flash('Example 2 loaded','info')
+            form.datastructure.data = json.dumps(example2, indent=4)
+
     return render_template('load.html', form=form, title='Load'), 200
     # return "Service is running", 200
 

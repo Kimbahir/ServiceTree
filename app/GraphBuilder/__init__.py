@@ -147,7 +147,10 @@ class graphBuilder:
         label += f'<tr><td port="port0" border="1" bgcolor="{headingfillcolor}"><font color="{headingtextcolor}">{service["label"]}</font></td></tr>'
 
         for idx, server in enumerate(service['servers'], start=1):
-            label += f'<tr><td port="port{idx}" border="1" bgcolor="{cellfillcolor}"><font color="{celltextcolor}">{server["name"]}</font></td></tr>'
+            server_name = "&nbsp;"
+            if server["name"] != "":
+                server_name = server["name"]
+            label += f'<tr><td port="port{idx}" border="1" bgcolor="{cellfillcolor}"><font color="{celltextcolor}">{server_name}</font></td></tr>'
 
         label += '</table>>'
 

@@ -65,15 +65,21 @@ def patch():
         g = graphBuilder()
         logging.debug(
             f"datastructure to load: {session['datastructure']}")
+
         g.loadServiceTreeFromJSON(session['datastructure'])
+
         logging.debug('datastructure loaded')
         logging.debug(f'CSV input is {form.csv.data}')
+
         serviceList = g.getServiceArrayFromCSV(form.csv.data)
+
         logging.debug(f'Service list is {serviceList}')
+
         g.serviceTree.services = serviceList
         if form.clear.data:
             g.serviceTree.clearRelations()
         logging.debug("ServiceList loaded")
+
         session['datastructure'] = g.serviceTree.getServiceTreeAsJSON()
         return redirect(url_for('home')), 302
     return render_template('patch.html', form=form, title='Patch'), 200
@@ -125,10 +131,7 @@ def relate():
             f"Relation {form.provider.data} --> {form.consumer.data} created!", "success")
         return redirect(url_for('relate')), 302
 
-    #chart_output = g.drawGraphForDynamicWeb()
-    # return render_template('relate.html', form=form, title="Relate", chart_output=chart_output), 200
     return render_template('relate.html', form=form, title="Relate"), 200
-    # return "Service is running", 200
 
 
 @app.route("/detach", methods=["GET", "POST"])
@@ -155,7 +158,6 @@ def detach():
 
     form.relation.choices = choices
 
-    # logging.debug(f'Errors: {}')
     logging.debug(
         f'ready to validate on submit with relation: {form.relation.data} ')
     if form.validate_on_submit():
@@ -185,22 +187,21 @@ def persist():
         flash('Please load a datastructure before use', 'info')
         return redirect(url_for('load')), 302
 
-    # proxy = StringIO
-
-    # proxy.write(json.dumps(session['datastructure']))
-
-    # mem = BytesIO
-    # mem.write(proxy.getvalue().encode('utf-8'))
-    # mem.seek(0)
-
     b = BytesIO()
 
     datastructure = json.dumps(session['datastructure'])
 
+    g = graphBuilder()
+    g.loadServiceTreeFromJSON(session['datastructure'])
+
     b.write(datastructure.encode('utf-8'))
     b.seek(0)
 
-    return send_file(b, as_attachment=True, attachment_filename='data.json', mimetype='text/json')
+    filename = "data.json"
+    if g.serviceTree.label != "":
+        filename = f"{g.serviceTree.label}.json"
+
+    return send_file(b, as_attachment=True, attachment_filename=filename, mimetype='text/json')
     # return "Service is running", 200
 
 
@@ -215,7 +216,12 @@ def view():
 
     b = g.drawGraphForWeb()
     b.seek(0)
-    return send_file(b, as_attachment=True, attachment_filename='servicetree.gv.pdf', mimetype='application/pdf')
+
+    filename = "servicetree.gv.pdf"
+    if g.serviceTree.label != "":
+        filename = f"{g.serviceTree.label}.gv.pdf"
+
+    return send_file(b, as_attachment=True, attachment_filename=filename, mimetype='application/pdf')
     # return render_template('view.html'), 200
     # return "Service is running", 200
 

@@ -20,12 +20,12 @@ logging.basicConfig(level=logging.DEBUG, format='%(levelname)s:\t%(message)s')
 @app.route("/", methods=["GET"])
 def home():
     form = HomeForm()
-    
+
     s = ""
 
     if "datastructure" in session.keys():
         form.view.data = session['datastructure']
-        
+
         if type(session['datastructure']) == str:
             s = json.loads(session['datastructure'])
         else:
@@ -43,16 +43,16 @@ def load():
                 flash('You must add a datastructure', 'danger')
             else:
                 session['datastructure'] = form.datastructure.data
-                flash('Datastructure loaded','success')
+                flash('Datastructure loaded', 'success')
                 return redirect(url_for('home')), 302
         elif form.empty.data:
-            flash('Empty template loaded','info')
+            flash('Empty template loaded', 'info')
             form.datastructure.data = json.dumps(empty, indent=4)
         elif form.example1.data:
-            flash('Example 1 loaded','info')
+            flash('Example 1 loaded', 'info')
             form.datastructure.data = json.dumps(example1, indent=4)
         elif form.example2.data:
-            flash('Example 2 loaded','info')
+            flash('Example 2 loaded', 'info')
             form.datastructure.data = json.dumps(example2, indent=4)
 
     return render_template('load.html', form=form, title='Load'), 200
@@ -62,7 +62,7 @@ def load():
 @app.route("/patch", methods=["GET", "POST"])
 def patch():
     if "datastructure" not in session.keys():
-        flash('Please load a datastructure before use','info')
+        flash('Please load a datastructure before use', 'info')
         return redirect(url_for('load')), 302
 
     form = PatchForm()
@@ -86,7 +86,7 @@ def patch():
 @app.route("/relate", methods=["GET", "POST"])
 def relate():
     if "datastructure" not in session.keys():
-        flash('Please load a datastructure before use','info')
+        flash('Please load a datastructure before use', 'info')
         return redirect(url_for('load')), 302
 
     form = RelateForm()
@@ -137,7 +137,7 @@ def relate():
 @app.route("/detach", methods=["GET", "POST"])
 def detach():
     if "datastructure" not in session.keys():
-        flash('Please load a datastructure before use','info')
+        flash('Please load a datastructure before use', 'info')
         return redirect(url_for('load')), 302
 
     form = DetachForm()
@@ -146,9 +146,15 @@ def detach():
     g.loadServiceTreeFromJSON(session['datastructure'])
 
     choices = []
-    for r in g.serviceTree.relations:
-        choices.append((f'{r["supporter"]} --> {r["consumer"]}',
-                        f'{g.serviceTree.getServiceLabelFromName(r["supporter"])} --> {g.serviceTree.getServiceLabelFromName(r["consumer"])}'))
+
+    # Passing along if a /patch has invalidated the service list
+    try:
+        for r in g.serviceTree.relations:
+            choices.append((f'{r["supporter"]} --> {r["consumer"]}',
+                            f'{g.serviceTree.getServiceLabelFromName(r["supporter"])} --> {g.serviceTree.getServiceLabelFromName(r["consumer"])}'))
+    except:
+        flash('Error in relations - please correct and reload', 'danger')
+        return redirect(url_for('home')), 302
 
     form.relation.choices = choices
 
@@ -179,7 +185,7 @@ def detach():
 @app.route("/persist", methods=["GET"])
 def persist():
     if "datastructure" not in session.keys():
-        flash('Please load a datastructure before use','info')
+        flash('Please load a datastructure before use', 'info')
         return redirect(url_for('load')), 302
 
     # proxy = StringIO
@@ -204,7 +210,7 @@ def persist():
 @app.route("/view", methods=["GET"])
 def view():
     if "datastructure" not in session.keys():
-        flash('Please load a datastructure before use','info')
+        flash('Please load a datastructure before use', 'info')
         return redirect(url_for('load')), 302
 
     g = graphBuilder()

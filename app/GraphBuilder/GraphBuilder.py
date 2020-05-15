@@ -18,6 +18,14 @@ class graphBuilder:
         self.serviceTree = serviceTree
 
     def getServiceArrayFromCSV(self, csv):
+        """Generates a new service array from a CSV input. CSV can have either 1, 3 or 4 columns
+
+        Arguments:
+            csv {str} -- 1, 3 or 4 columns, for ServiceName, +Server ID, +Server Name, +ServiceType
+
+        Returns:
+            array -- Returns an array of dicts containing services with associated servers
+        """
         result = []
 
         currentService = "absolutelynotgonnahappenever"
@@ -30,15 +38,20 @@ class graphBuilder:
                 currentService = row[0]
                 if idx != 0:
                     result.append(tmp)
+                if len(row) == 4:
+                    service_type = row[3]
+                else:
+                    service_type = "none"
                 tmp = {
                     "name": row[0],
                     "label": row[0],
-                    "type": "none",
+                    "type": service_type,
                     "servers": []
                 }
 
-            srv = {"id": row[1], "name": row[2]}
-            tmp["servers"].append(srv)
+            if len(row) >= 3:
+                srv = {"id": row[1], "name": row[2]}
+                tmp["servers"].append(srv)
 
         result.append(tmp)
 

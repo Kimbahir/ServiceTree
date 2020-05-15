@@ -40,6 +40,9 @@ class serviceTree:
 
         self.relations.append(rel)
 
+    def clearRelations(self):
+        self.relations = []
+
     def loadFromJSON(self, jsonInput: json):
         """Loading a full service tree with children based on JSON input
         Primarily functions to ensure some sort of quality control

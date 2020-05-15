@@ -12,12 +12,50 @@
             {{ form.csv(class="form-control", rows="15") }}
         </div>
         <div class="form-group">
+            <label for="clear">Clear all existing relations?</label>
+            {{ form.clear(class="form-control")}}
+        </div>
+        <div class="form-group">
             {{ form.submit(class="btn btn-primary") }}
         </div>
 
 
 </div>
 </form>
+<strong>Instructions:</strong><br />
+You can add a service list in the form of comma separated input. It can be either as a list of services only.
+Example:
+<ul>
+    <li>Service A</li>
+    <li>Service B</li>
+    <li>Service C</li>
+</ul>
+Or as a list containing both Service Name, Server ID and Server Name. Example:
+<ul>
+    <li>Service A,1111,Web server A</li>
+    <li>Service A,1112,Web server B</li>
+    <li>Service A,1113,Web server C</li>
+    <li>Service B,1211,Database A</li>
+    <li>Service B,1212,Database B</li>
+    <li>Service C,1311,Fileservices</li>
+</ul>
+And finally a service type can be added. The meaningful forms are:
+<ul>
+    <li>farm</li>
+    <li>aacluster</li>
+    <li>apcluster</li>
+</ul>
+Example:
+<ul>
+    <li>Service A,1111,Web server A,farm</li>
+    <li>Service A,1112,Web server B,farm</li>
+    <li>Service A,1113,Web server C,farm</li>
+    <li>Service B,1211,Database A,apcluster</li>
+    <li>Service B,1212,Database B,apcluster</li>
+    <li>Service C,1311,Fileservices,aacluster</li>
+    <li>Service C,1312,Fileservices,aacluster</li>
+    <li>Service D,1411,Other,other</li>
+</ul>
 
 
 </div>

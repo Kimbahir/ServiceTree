@@ -24,6 +24,7 @@ class LoadForm(FlaskForm):
 
 class PatchForm(FlaskForm):
     csv = TextAreaField("csv", validators=[DataRequired()])
+    clear = BooleanField("Clear all relations?")
     submit = SubmitField("Submit")
 
 

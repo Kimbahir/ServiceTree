@@ -97,6 +97,8 @@ def relate():
     g = graphBuilder()
     g.loadServiceTreeFromJSON(session['datastructure'])
 
+    chart_output = g.drawSVGGraph()
+
     services = []
     for s in g.serviceTree.services:
         services.append((s['name'], s['label']))
@@ -131,7 +133,7 @@ def relate():
             f"Relation {form.provider.data} --> {form.consumer.data} created!", "success")
         return redirect(url_for('relate')), 302
 
-    return render_template('relate.html', form=form, title="Relate"), 200
+    return render_template('relate.html', form=form, title="Relate", chart_output=chart_output), 200
 
 
 @app.route("/detach", methods=["GET", "POST"])
@@ -144,6 +146,7 @@ def detach():
 
     g = graphBuilder()
     g.loadServiceTreeFromJSON(session['datastructure'])
+    chart_output = g.drawSVGGraph()
 
     choices = []
 
@@ -177,7 +180,7 @@ def detach():
 
         return redirect(url_for('detach')), 302
 
-    return render_template('detach.html', form=form, title="Relate"), 200
+    return render_template('detach.html', form=form, title="Relate", chart_output=chart_output), 200
     # return "Service is running", 200
 
 
@@ -237,3 +240,13 @@ def viewonly():
     return send_file(b,  mimetype='application/pdf')
     # return render_template('view.html'), 200
     # return "Service is running", 200
+
+
+@app.route("/viewsvg", methods=["GET"])
+def viewsvg():
+    g = graphBuilder()
+    g.loadServiceTreeFromJSON(session['datastructure'])
+
+    chart_output = g.drawSVGGraph()
+
+    return render_template('svg2.html', chart_output=chart_output)

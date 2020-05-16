@@ -30,10 +30,14 @@ class graphBuilder:
 
         currentService = "absolutelynotgonnahappenever"
         tmp = {}
-        for idx, record in enumerate(csv.split('\r')):
-            logging.debug(record)
 
-            row = record.replace('\n', '').split(',')
+        for idx, record in enumerate(csv.split('\r')):
+
+            row = record.replace('\n', '').replace('\r', '').split(',')
+
+            if row[0] == "":
+                continue
+
             if idx == 0 or row[0] != currentService:
                 currentService = row[0]
                 if idx != 0:
@@ -155,6 +159,25 @@ class graphBuilder:
         else:
             g.render(filename, view=view)
 
+    def htmlEscape(self, text):
+        """Escapes for simple HTML tags as Graphviz is vulnerable
+
+        Arguments:
+            text {str} -- strings to be html escaped
+
+        Returns:
+            str -- escaped html
+        """
+        html_escape_table = {
+            "&": "&amp;",
+            '"': "&quot;",
+            "'": "&apos;",
+            ">": "&gt;",
+            "<": "&lt;"
+        }
+
+        return "".join(html_escape_table.get(c, c) for c in text)
+
     def getHtmlTable(self, service):
         """Returns the HTML form (compliant with graphviz) of a label
 
@@ -187,14 +210,15 @@ class graphBuilder:
             cellfillcolor = "white"
 
         logging.debug(f'service is {service}')
+
         label = '<<table border="0" cellspacing="0">'
-        label += f'<tr><td port="port0" border="1" bgcolor="{headingfillcolor}"><font color="{headingtextcolor}">{service["label"]}</font></td></tr>'
+        label += f'<tr><td port="port0" border="1" bgcolor="{headingfillcolor}"><font color="{headingtextcolor}">{self.htmlEscape(service["label"])}</font></td></tr>'
 
         for idx, server in enumerate(service['servers'], start=1):
             server_name = "&nbsp;"
             if server["name"] != "":
                 server_name = server["name"]
-            label += f'<tr><td port="port{idx}" border="1" bgcolor="{cellfillcolor}"><font color="{celltextcolor}">{server_name}</font></td></tr>'
+            label += f'<tr><td port="port{idx}" border="1" bgcolor="{cellfillcolor}"><font color="{celltextcolor}">{self.htmlEscape(server_name)}</font></td></tr>'
 
         label += '</table>>'
 

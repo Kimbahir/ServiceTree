@@ -49,7 +49,7 @@ class graphBuilder:
                     "servers": []
                 }
 
-            if len(row) >= 3:
+            if len(row) >= 3 and (row[1] != "" and row[2] != ""):
                 srv = {"id": row[1], "name": row[2]}
                 tmp["servers"].append(srv)
 

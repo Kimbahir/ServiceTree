@@ -4,7 +4,7 @@
     <form method="POST" action="">
         {{ form.hidden_tag() }}
         <h1>Relate Services</h1>
-        <p>Select a provider and a consumer and create relation</p>
+        <p>Check instructions below</p>
         <div class="form-group">
             <label for="provider">Provider:</label>
             {{ form.provider(class="form-control") }}
@@ -21,26 +21,21 @@
         <div class="form-group">
             {{ form.submit(class="btn btn-primary") }}
         </div>
-
-        {{ chart_output|safe }}
-
-        {% if form.provider.errors %}
-        <ul class=" errors">
-            {% for error in form.provider.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-
-        {% if form.consumer.errors %}
-        <ul class="errors">
-            {% for error in form.consumer.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-
     </form>
-
+</div>
+<hr>
+{{ chart_output|safe }}
+<hr>
+<div class="content-section">
+    <strong>Instructions:</strong>
+    <p>
+        A relation is created by selecting a <em>provider</em> and a <em>consumer</em> and selecting
+        whether it is a vital relation. A <em>provider</em> is a service that is necessary for the
+        <em>consumer</em> service to function. If it is a vital service, the consumer will not function
+        at all in case of the <em>provider</em> is down.
+    </p>
+    <p>
+        If a relation was made in error, it can be corrected by <a href="{{url_for('detach')}}">detaching it</a>
+    </p>
 </div>
 {% endblock content %}

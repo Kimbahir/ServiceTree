@@ -4,8 +4,9 @@
     <form method="POST" action="">
         {{ form.hidden_tag() }}
         <h1>Load file</h1>
+        <p>Paste json compliant input in the textarea - handle with care</p>
         <div class="form-group">
-            {{ form.empty(class="btn btn-primary")}} 
+            {{ form.empty(class="btn btn-primary")}}
             {{ form.example1(class="btn btn-primary")}}
             {{ form.example2(class="btn btn-primary")}}
         </div>
@@ -16,11 +17,19 @@
         <div class="form-group">
             {{ form.submit(class="btn btn-primary") }}
         </div>
-
+    </form>
+</div>
+<hr>
+<div class="content-section">
+    <strong>Instructions:</strong><br />
+    <p>You can enter or edit json input in the text area below or load an example. Please note that
+        they aren't actually submitted before you press Submit. Success will result in a redirect to
+        the front page which will print the resulting json.</p>
+    <p>It is possible to edit by just copy/pasting the result back into the load formula and then
+        alter the necessary.</p>
+    <p>If you need to just update the server lists relating to services, try out the
+        <a href="{{url_for('patch')}}">/patch function</a></p>
 
 </div>
-</form>
 
-
-</div>
 {% endblock content %}

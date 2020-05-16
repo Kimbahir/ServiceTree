@@ -4,7 +4,7 @@
     <form method="POST" action="">
         {{ form.hidden_tag() }}
         <h1>Detach Services</h1>
-        <p>Select a relation to detach</p>
+        <p>Check Instructions below</p>
         <div class="form-group">
             <label for="relation">Relation:</label>
             {{ form.relation(class="form-control") }}
@@ -14,6 +14,18 @@
             {{ form.submit(class="btn btn-primary") }}
         </div>
     </form>
-    {{ chart_output|safe }}
+</div>
+<hr>
+{{ chart_output|safe }}
+<hr>
+<div class="content-section">
+    <strong>Instructions:</strong>
+    <p>
+        A relation is removed by selecting it in the dropdown above and pressing submit
+    </p>
+    <p>
+        If a relation was detached in error, it can be corrected by
+        <a href="{{url_for('relate')}}">re-creating the relation</a>
+    </p>
 </div>
 {% endblock content %}

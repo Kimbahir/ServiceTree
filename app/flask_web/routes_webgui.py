@@ -11,6 +11,8 @@ from io import BytesIO
 from io import StringIO
 from app.flask_web import app
 
+logging.basicConfig(level=logging.DEBUG, format='%(levelname)s:\t%(message)s')
+
 
 @app.route("/", methods=["GET"])
 def home():

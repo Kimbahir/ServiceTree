@@ -22,10 +22,10 @@
             {{ form.submit(class="btn btn-primary") }}
         </div>
 
-        <embed src="{{url_for('viewonly')}}" width="100%" height='600px' />
+        {{ chart_output|safe }}
 
         {% if form.provider.errors %}
-        <ul class="errors">
+        <ul class=" errors">
             {% for error in form.provider.errors %}
             <li>{{ error }}</li>
             {% endfor %}

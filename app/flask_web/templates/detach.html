@@ -13,10 +13,7 @@
         <div class="form-group">
             {{ form.submit(class="btn btn-primary") }}
         </div>
-
-        <embed src="{{url_for('viewonly')}}" width="100%" height='600px' />
-
     </form>
-
+    {{ chart_output|safe }}
 </div>
 {% endblock content %}

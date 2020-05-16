@@ -90,6 +90,37 @@ class graphBuilder:
         logging.debug('Data written')
         return b
 
+    def drawSVGGraph(self):
+        """Draws the actual graph, based on the current service tree.
+
+        Returns:
+            str -- Returns the SVG representation
+
+        """
+        g = Digraph(comment=self.serviceTree.name)
+        g.attr(rankdir='TB')
+        g.attr(shape='circle')
+
+        for service in self.serviceTree.services:
+            label = self.getHtmlTable(service)
+
+            g.node(service['name'], shape='none', label=label,
+                   URL="https://github.com/Kimbahir/ServiceTree")
+
+        for relation in self.serviceTree.relations:
+            if relation['type'] == "vital":
+                g.edge(relation['supporter'],
+                       relation['consumer'], penwidth="3.0", color="blue")
+            else:
+                g.edge(relation['supporter'],
+                       relation['consumer'])
+
+        logging.debug(g.source)
+
+        result = g.pipe(format='svg').decode('utf-8')
+
+        return result
+
     def drawGraph(self, filename=None, view=True):
         """Draws the actual graph, based on the current service tree.
 

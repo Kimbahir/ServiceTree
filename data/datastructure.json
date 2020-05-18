@@ -66,27 +66,27 @@
     ],
     "relations": [
         {
-            "supporter": "dbcluster",
+            "provider": "dbcluster",
             "consumer": "retail",
             "type": "vital"
         },
         {
-            "supporter": "batchservice",
+            "provider": "batchservice",
             "consumer": "dbcluster",
             "type": "vital"
         },
         {
-            "supporter": "dbcluster",
+            "provider": "dbcluster",
             "consumer": "batchservice",
             "type": "vital"
         },
         {
-            "supporter": "fileservice",
+            "provider": "fileservice",
             "consumer": "retail",
             "type": "vital"
         },
         {
-            "supporter": "batchservice",
+            "provider": "batchservice",
             "consumer": "retail",
             "type": "important"
         }

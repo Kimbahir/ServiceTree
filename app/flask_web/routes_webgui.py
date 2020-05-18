@@ -6,7 +6,7 @@ from app.flask_web.examples import empty, example1, example2
 import logging
 import json
 import os
-from app.flask_web.forms import HomeForm, LoadForm, PatchForm, RelateForm, DetachForm
+from app.flask_web.forms import HomeForm, LoadForm, PatchForm, RelateForm, DetachForm, DownloadForm
 from io import BytesIO
 from io import StringIO
 from app.flask_web import app
@@ -155,8 +155,8 @@ def detach():
     # Passing along if a /patch has invalidated the service list
     try:
         for r in g.serviceTree.relations:
-            choices.append((f'{r["supporter"]} --> {r["consumer"]}',
-                            f'{g.serviceTree.getServiceLabelFromName(r["supporter"])} --> {g.serviceTree.getServiceLabelFromName(r["consumer"])}'))
+            choices.append((f'{r["provider"]} --> {r["consumer"]}',
+                            f'{g.serviceTree.getServiceLabelFromName(r["provider"])} --> {g.serviceTree.getServiceLabelFromName(r["consumer"])}'))
     except:
         flash('Error in relations - please correct and reload', 'danger')
         return redirect(url_for('home')), 302
@@ -169,7 +169,7 @@ def detach():
         logging.debug('Is validated on submit')
 
         for idx, r in enumerate(g.serviceTree.relations):
-            if f'{r["supporter"]} --> {r["consumer"]}' == form.relation.data:
+            if f'{r["provider"]} --> {r["consumer"]}' == form.relation.data:
                 g.serviceTree.relations.pop(idx)
                 break
 
@@ -186,49 +186,47 @@ def detach():
     # return "Service is running", 200
 
 
-@app.route("/persist", methods=["GET"])
-def persist():
+@app.route("/download", methods=["GET", "POST"])
+def download():
+
     if "datastructure" not in session.keys():
         flash('Please load a datastructure before use', 'info')
         return redirect(url_for('load')), 302
+
+    form = DownloadForm()
 
     b = BytesIO()
 
     datastructure = json.dumps(session['datastructure'])
 
-    g = graphBuilder()
-    g.loadServiceTreeFromJSON(session['datastructure'])
+    if form.validate_on_submit():
 
-    b.write(datastructure.encode('utf-8'))
-    b.seek(0)
+        g = graphBuilder()
+        g.loadServiceTreeFromJSON(session['datastructure'])
 
-    filename = "data.json"
-    if g.serviceTree.label != "":
-        filename = f"{g.serviceTree.label}.json"
+        if form.json.data:
 
-    return send_file(b, as_attachment=True, attachment_filename=filename, mimetype='text/json')
-    # return "Service is running", 200
+            b.write(datastructure.encode('utf-8'))
+            b.seek(0)
 
+            filename = "data.json"
+            if g.serviceTree.label != "":
+                filename = f"{g.serviceTree.label}.json"
 
-@app.route("/view", methods=["GET"])
-def view():
-    if "datastructure" not in session.keys():
-        flash('Please load a datastructure before use', 'info')
-        return redirect(url_for('load')), 302
+            return send_file(b, as_attachment=True, attachment_filename=filename, mimetype='text/json')
+        elif form.pdf.data:
+            b = g.drawGraphForWeb()
+            b.seek(0)
 
-    g = graphBuilder()
-    g.loadServiceTreeFromJSON(session['datastructure'])
+            filename = "servicetree.gv.pdf"
+            if g.serviceTree.label != "":
+                filename = f"{g.serviceTree.label}.gv.pdf"
 
-    b = g.drawGraphForWeb()
-    b.seek(0)
+            return send_file(b, as_attachment=True, attachment_filename=filename, mimetype='application/pdf')
+        else:
+            flash("No valid format found", "danger")
 
-    filename = "servicetree.gv.pdf"
-    if g.serviceTree.label != "":
-        filename = f"{g.serviceTree.label}.gv.pdf"
-
-    return send_file(b, as_attachment=True, attachment_filename=filename, mimetype='application/pdf')
-    # return render_template('view.html'), 200
-    # return "Service is running", 200
+    return render_template('download.html', form=form, title="Download"), 200
 
 
 @app.route("/viewonly", methods=["GET"])

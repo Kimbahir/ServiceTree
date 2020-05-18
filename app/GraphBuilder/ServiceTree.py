@@ -36,9 +36,25 @@ class serviceTree:
 
     def addRelation(self, provider, consumer, relationType):
 
-        rel = {'supporter': provider, 'consumer': consumer, 'type': relationType}
+        rel = {'provider': provider, 'consumer': consumer, 'type': relationType}
 
         self.relations.append(rel)
+
+    def deleteRelation(self, provider, consumer, relationType=None):
+        result = []
+
+        for r in self.relations:
+            logging.debug(
+                f"provider is '{provider}' and consumer is '{consumer}' with the relation '{relationType}'")
+            if r['provider'] != provider and r['consumer'] != consumer:
+                result.append(r)
+            else:
+                if relationType != r['type']:
+                    result.append(r)
+                else:
+                    pass
+
+        self.relations = result
 
     def clearRelations(self):
         self.relations = []

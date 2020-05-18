@@ -17,6 +17,9 @@ class graphBuilder:
     def setServiceTree(self, serviceTree):
         self.serviceTree = serviceTree
 
+    def setServiceArrayFromCSV(self, csv):
+        self.serviceTree.services = self.getServiceArrayFromCSV(csv)
+
     def getServiceArrayFromCSV(self, csv):
         """Generates a new service array from a CSV input. CSV can have either 1, 3 or 4 columns
 
@@ -79,10 +82,10 @@ class graphBuilder:
 
         for relation in self.serviceTree.relations:
             if relation['type'] == "vital":
-                g.edge(relation['supporter'],
+                g.edge(relation['provider'],
                        relation['consumer'], penwidth="3.0", color="blue")
             else:
-                g.edge(relation['supporter'],
+                g.edge(relation['provider'],
                        relation['consumer'])
 
         logging.debug(g.source)
@@ -113,10 +116,10 @@ class graphBuilder:
 
         for relation in self.serviceTree.relations:
             if relation['type'] == "vital":
-                g.edge(relation['supporter'],
+                g.edge(relation['provider'],
                        relation['consumer'], penwidth="3.0", color="blue")
             else:
-                g.edge(relation['supporter'],
+                g.edge(relation['provider'],
                        relation['consumer'])
 
         logging.debug(g.source)
@@ -144,10 +147,10 @@ class graphBuilder:
 
         for relation in self.serviceTree.relations:
             if relation['type'] == "vital":
-                g.edge(relation['supporter'],
+                g.edge(relation['provider'],
                        relation['consumer'], penwidth="3.0", color="blue")
             else:
-                g.edge(relation['supporter'],
+                g.edge(relation['provider'],
                        relation['consumer'])
 
         logging.debug(g.source)

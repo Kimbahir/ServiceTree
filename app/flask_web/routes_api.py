@@ -12,7 +12,7 @@ from io import StringIO
 from app.flask_web import app
 
 
-@app.route("/drawtree", methods=["GET", "POST"])
+@app.route("/api/v1/drawtree", methods=["GET", "POST"])
 def drawTree():
     try:
         logging.debug('Getting JSON from request object')
@@ -32,26 +32,93 @@ def drawTree():
     # return "OK", 200
 
 
-# @app.route("/showpicture", methods=['GET'])
-# def showpicture():
+@app.route("/api/v1/loadcsv", methods=["POST"])
+def api_loadcsv():
+    try:
+        logging.debug('Getting JSON from request object')
+        data = request.get_json()
 
-#     b = BytesIO()
+        datastructure = data['datastructure']
+        csv = data['csv']
 
-#     logging.debug('do we get here?')
+        g = graphBuilder()
+        g.loadServiceTreeFromJSON(datastructure)
+        g.setServiceArrayFromCSV(csv)
 
-#     g = graphBuilder()
-
-#     logging.debug('Trying to get session')
-
-#     g.loadServiceTreeFromJSON(session['datastructure'])
-
-#     logging.debug('Creating output')
-
-#     chart_output = g.drawGraphForDynamicWeb()
-
-#     logging.debug('Ready to return')
-
-#     return render_template('svg.html', chart_output=chart_output)
+        return app.response_class(response=json.dumps(g.serviceTree.getServiceTreeAsJSON()), status=200, mimetype="application/json")
+    except Exception as e:
+        return "Something went bad..." + str(e), 500
 
 
-# app.run(debug=debug_flag, host="0.0.0.0", port="8000")
+@app.route("/api/v1/relate", methods=["POST"])
+def api_relate():
+    try:
+        logging.debug('Getting JSON from request object')
+        data = request.get_json()
+
+        datastructure = data['datastructure']
+        relation = data['relation']
+
+        g = graphBuilder()
+        g.loadServiceTreeFromJSON(datastructure)
+        g.serviceTree.relations.append(relation)
+
+        return app.response_class(response=json.dumps(g.serviceTree.getServiceTreeAsJSON()), status=200, mimetype="application/json")
+    except Exception as e:
+        return "Something went bad..." + str(e), 500
+
+
+@app.route("/api/v1/detach", methods=["POST"])
+def api_detach():
+    try:
+        logging.debug('Getting JSON from request object')
+        data = request.get_json()
+
+        datastructure = data['datastructure']
+        relation = data['relation']
+
+        g = graphBuilder()
+        g.loadServiceTreeFromJSON(datastructure)
+
+        g.serviceTree.deleteRelation(
+            relation['provider'], relation['consumer'], relation['type'])
+
+        return app.response_class(response=json.dumps(g.serviceTree.getServiceTreeAsJSON()), status=200, mimetype="application/json")
+    except Exception as e:
+        return "Something went bad..." + str(e), 500
+
+
+@app.route("/api/v1/reset/services", methods=["POST"])
+def api_reset_services():
+    try:
+        logging.debug('Getting JSON from request object')
+        data = request.get_json()
+
+        datastructure = data['datastructure']
+
+        g = graphBuilder()
+        g.loadServiceTreeFromJSON(datastructure)
+
+        g.serviceTree.services = []
+
+        return app.response_class(response=json.dumps(g.serviceTree.getServiceTreeAsJSON()), status=200, mimetype="application/json")
+    except Exception as e:
+        return "Something went bad..." + str(e), 500
+
+
+@app.route("/api/v1/reset/relations", methods=["POST"])
+def api_reset_relations():
+    try:
+        logging.debug('Getting JSON from request object')
+        data = request.get_json()
+
+        datastructure = data['datastructure']
+
+        g = graphBuilder()
+        g.loadServiceTreeFromJSON(datastructure)
+
+        g.serviceTree.relations = []
+
+        return app.response_class(response=json.dumps(g.serviceTree.getServiceTreeAsJSON()), status=200, mimetype="application/json")
+    except Exception as e:
+        return "Something went bad..." + str(e), 500

@@ -32,8 +32,7 @@ def test_initial_redirects(client):
         '/patch',
         '/relate',
         '/detach',
-        '/view',
-        '/persist'
+        '/download'
     ]
 
     for url in urls:
@@ -54,8 +53,7 @@ def test_no_redirect_loaded(loaded_client):
         '/patch',
         '/relate',
         '/detach',
-        '/view',
-        '/persist'
+        '/download'
     ]
 
     for url in urls:

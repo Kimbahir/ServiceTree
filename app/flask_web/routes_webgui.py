@@ -155,8 +155,8 @@ def detach():
     # Passing along if a /patch has invalidated the service list
     try:
         for r in g.serviceTree.relations:
-            choices.append((f'{r["supporter"]} --> {r["consumer"]}',
-                            f'{g.serviceTree.getServiceLabelFromName(r["supporter"])} --> {g.serviceTree.getServiceLabelFromName(r["consumer"])}'))
+            choices.append((f'{r["provider"]} --> {r["consumer"]}',
+                            f'{g.serviceTree.getServiceLabelFromName(r["provider"])} --> {g.serviceTree.getServiceLabelFromName(r["consumer"])}'))
     except:
         flash('Error in relations - please correct and reload', 'danger')
         return redirect(url_for('home')), 302
@@ -169,7 +169,7 @@ def detach():
         logging.debug('Is validated on submit')
 
         for idx, r in enumerate(g.serviceTree.relations):
-            if f'{r["supporter"]} --> {r["consumer"]}' == form.relation.data:
+            if f'{r["provider"]} --> {r["consumer"]}' == form.relation.data:
                 g.serviceTree.relations.pop(idx)
                 break
 

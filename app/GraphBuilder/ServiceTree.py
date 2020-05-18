@@ -36,7 +36,7 @@ class serviceTree:
 
     def addRelation(self, provider, consumer, relationType):
 
-        rel = {'supporter': provider, 'consumer': consumer, 'type': relationType}
+        rel = {'provider': provider, 'consumer': consumer, 'type': relationType}
 
         self.relations.append(rel)
 

@@ -79,10 +79,10 @@ class graphBuilder:
 
         for relation in self.serviceTree.relations:
             if relation['type'] == "vital":
-                g.edge(relation['supporter'],
+                g.edge(relation['provider'],
                        relation['consumer'], penwidth="3.0", color="blue")
             else:
-                g.edge(relation['supporter'],
+                g.edge(relation['provider'],
                        relation['consumer'])
 
         logging.debug(g.source)
@@ -113,10 +113,10 @@ class graphBuilder:
 
         for relation in self.serviceTree.relations:
             if relation['type'] == "vital":
-                g.edge(relation['supporter'],
+                g.edge(relation['provider'],
                        relation['consumer'], penwidth="3.0", color="blue")
             else:
-                g.edge(relation['supporter'],
+                g.edge(relation['provider'],
                        relation['consumer'])
 
         logging.debug(g.source)
@@ -144,10 +144,10 @@ class graphBuilder:
 
         for relation in self.serviceTree.relations:
             if relation['type'] == "vital":
-                g.edge(relation['supporter'],
+                g.edge(relation['provider'],
                        relation['consumer'], penwidth="3.0", color="blue")
             else:
-                g.edge(relation['supporter'],
+                g.edge(relation['provider'],
                        relation['consumer'])
 
         logging.debug(g.source)

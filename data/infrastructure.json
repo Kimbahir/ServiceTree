@@ -57,17 +57,17 @@
     ],
     "relations": [
         {
-            "supporter": "k8s",
+            "provider": "k8s",
             "consumer": "servicetree",
             "type": "vital"
         },
         {
-            "supporter": "workstation",
+            "provider": "workstation",
             "consumer": "servicetree",
             "type": "none"
         },
         {
-            "supporter": "docker",
+            "provider": "docker",
             "consumer": "k8s",
             "type": "vital"
         }

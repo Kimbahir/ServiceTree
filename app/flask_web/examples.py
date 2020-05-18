@@ -65,17 +65,17 @@ example1 = {
     ],
     "relations": [
         {
-            "supporter": "k8s",
+            "provider": "k8s",
             "consumer": "servicetree",
             "type": "vital"
         },
         {
-            "supporter": "workstation",
+            "provider": "workstation",
             "consumer": "servicetree",
             "type": "none"
         },
         {
-            "supporter": "docker",
+            "provider": "docker",
             "consumer": "k8s",
             "type": "vital"
         }
@@ -150,27 +150,27 @@ example2 = {
     ],
     "relations": [
         {
-            "supporter": "dbcluster",
+            "provider": "dbcluster",
             "consumer": "retail",
             "type": "vital"
         },
         {
-            "supporter": "batchservice",
+            "provider": "batchservice",
             "consumer": "dbcluster",
             "type": "vital"
         },
         {
-            "supporter": "dbcluster",
+            "provider": "dbcluster",
             "consumer": "batchservice",
             "type": "vital"
         },
         {
-            "supporter": "fileservice",
+            "provider": "fileservice",
             "consumer": "retail",
             "type": "vital"
         },
         {
-            "supporter": "batchservice",
+            "provider": "batchservice",
             "consumer": "retail",
             "type": "important"
         }

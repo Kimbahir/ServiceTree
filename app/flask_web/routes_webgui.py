@@ -186,6 +186,20 @@ def detach():
     # return "Service is running", 200
 
 
+@app.route("/view", methods=["GET", "POST"])
+def view():
+    if "datastructure" not in session.keys():
+        flash('Please load a datastructure before use', 'info')
+        return redirect(url_for('load')), 302
+
+    g = graphBuilder()
+    g.loadServiceTreeFromJSON(session['datastructure'])
+
+    chart_output = g.drawSVGGraph()
+
+    return render_template('view.html', title="Relate", chart_output=chart_output), 200
+
+
 @app.route("/download", methods=["GET", "POST"])
 def download():
 

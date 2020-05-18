@@ -38,3 +38,8 @@ class RelateForm(FlaskForm):
 class DetachForm(FlaskForm):
     relation = SelectField("Relation", validators=[DataRequired()])
     submit = SubmitField("Submit")
+
+
+class DownloadForm(FlaskForm):
+    json = SubmitField("JSON")
+    pdf = SubmitField("PDF")

@@ -1,0 +1,14 @@
+{% extends "layout.html" %} {% block content %}
+<div class="content-section">
+
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <h1>Download files</h1>
+        <p>Download your current service tree in the following formats:</p>
+        <div class="form-group">
+            {{ form.json(class="btn btn-primary")}}
+            {{ form.pdf(class="btn btn-primary")}}
+        </div>
+    </form>
+</div>
+{% endblock content %}

@@ -19,6 +19,7 @@ class LoadForm(FlaskForm):
     empty = SubmitField("Empty template")
     example1 = SubmitField("Example 1")
     example2 = SubmitField("Example 2")
+    example3 = SubmitField("Example 3")
     submit = SubmitField("Submit")
 
 

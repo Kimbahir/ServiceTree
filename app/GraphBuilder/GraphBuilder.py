@@ -70,6 +70,8 @@ class graphBuilder:
         now = datetime.now().strftime("%d-%m-%Y %H:%M")
         g.attr(
             'graph', label=f'[DEMO] {self.serviceTree.label} - created on {now}')
+        g.attr('graph', fontname='verdana', fontsize='10')
+        g.attr('node', fontname='verdana', fontsize='12')
         g.attr(rankdir='TB')
         g.attr(shape='circle')
 

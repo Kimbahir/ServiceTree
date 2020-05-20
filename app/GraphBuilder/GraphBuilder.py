@@ -4,6 +4,7 @@ import logging
 import json
 from io import BytesIO
 import base64
+from datetime import datetime
 
 
 class graphBuilder:
@@ -64,13 +65,13 @@ class graphBuilder:
 
         return result
 
-    def drawGraphForWeb(self, format='pdf'):
-        """Draws the actual graph, based on the current service tree.
-
-        Keyword Arguments:
-            format {str} -- graphviz output format (default: {pdf})
-        """
+    def drawGraphObject(self):
         g = Digraph(comment=self.serviceTree.name)
+        now = datetime.now().strftime("%d-%m-%Y %H:%M")
+        g.attr(
+            'graph', label=f'[DEMO] {self.serviceTree.label} - created on {now}')
+        g.attr('graph', fontname='verdana', fontsize='10')
+        g.attr('node', fontname='verdana', fontsize='12')
         g.attr(rankdir='TB')
         g.attr(shape='circle')
 
@@ -87,6 +88,17 @@ class graphBuilder:
             else:
                 g.edge(relation['provider'],
                        relation['consumer'])
+
+        return g
+
+    def drawGraphForWeb(self, format='pdf'):
+        """Draws the actual graph, based on the current service tree.
+
+        Keyword Arguments:
+            format {str} -- graphviz output format (default: {pdf})
+        """
+
+        g = self.drawGraphObject()
 
         logging.debug(g.source)
 
@@ -104,23 +116,7 @@ class graphBuilder:
             str -- Returns the SVG representation
 
         """
-        g = Digraph(comment=self.serviceTree.name)
-        g.attr(rankdir='TB')
-        g.attr(shape='circle')
-
-        for service in self.serviceTree.services:
-            label = self.getHtmlTable(service)
-
-            g.node(service['name'], shape='none', label=label,
-                   URL="https://github.com/Kimbahir/ServiceTree")
-
-        for relation in self.serviceTree.relations:
-            if relation['type'] == "vital":
-                g.edge(relation['provider'],
-                       relation['consumer'], penwidth="3.0", color="blue")
-            else:
-                g.edge(relation['provider'],
-                       relation['consumer'])
+        g = self.drawGraphObject()
 
         logging.debug(g.source)
 
@@ -135,23 +131,7 @@ class graphBuilder:
             filename {str} -- Placement of output (default: {None})
             view {bool} -- Is output to be presented to user? (default: {True})
         """
-        g = Digraph(comment=self.serviceTree.name)
-        g.attr(rankdir='TB')
-        g.attr(shape='circle')
-
-        for service in self.serviceTree.services:
-            label = self.getHtmlTable(service)
-
-            g.node(service['name'], shape='none', label=label,
-                   URL="https://github.com/Kimbahir/ServiceTree")
-
-        for relation in self.serviceTree.relations:
-            if relation['type'] == "vital":
-                g.edge(relation['provider'],
-                       relation['consumer'], penwidth="3.0", color="blue")
-            else:
-                g.edge(relation['provider'],
-                       relation['consumer'])
+        g = self.drawGraphObject()
 
         logging.debug(g.source)
 

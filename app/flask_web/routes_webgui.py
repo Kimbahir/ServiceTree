@@ -2,7 +2,7 @@
 from flask import Flask, render_template, url_for, request, send_file, session, redirect, flash
 from flask_bcrypt import Bcrypt
 from app.GraphBuilder import graphBuilder
-from app.flask_web.examples import empty, example1, example2
+from app.flask_web.examples import empty, example1, example2, example3
 import logging
 import json
 import os
@@ -51,6 +51,9 @@ def load():
         elif form.example2.data:
             flash('Example 2 loaded', 'info')
             form.datastructure.data = json.dumps(example2, indent=4)
+        elif form.example3.data:
+            flash('Example 3 loaded', 'info')
+            form.datastructure.data = json.dumps(example3, indent=4)
 
     return render_template('load.html', form=form, title='Load'), 200
     # return "Service is running", 200

@@ -36,6 +36,13 @@ class serviceTree:
         raise Exception(
             f"getServiceLabelFromName didn't find a service matching '{name}'")
 
+    def getServiceFromName(self, name):
+        for s in self.services:
+            if s['name'] == name:
+                return s
+        raise Exception(
+            f"getServiceFromName didn't find a service of name '{name}'")
+
     def addRelation(self, provider, consumer, relationType):
 
         rel = {'provider': provider, 'consumer': consumer, 'type': relationType}

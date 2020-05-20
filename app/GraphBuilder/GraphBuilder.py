@@ -75,11 +75,14 @@ class graphBuilder:
         g.attr(rankdir='TB')
         g.attr(shape='circle')
 
+        logging.debug(f"drawGraphObject has base_url: {base_url}")
+
         for service in self.serviceTree.services:
             label = self.getHtmlTable(service)
 
+            logging.debug('printing the URL')
             g.node(service['name'], shape='none', label=label,
-                   URL=f"{base_url}/servicedetails/{service['name']}")
+                   URL=f"{base_url}servicedetails/{service['name']}")
 
         for relation in self.serviceTree.relations:
             if relation['type'] == "vital":
@@ -104,15 +107,17 @@ class graphBuilder:
         # g.attr(rankdir='TB')
         g.attr(shape='circle')
 
-        service = self.serviceTree.services['service_name']
+        logging.debug('A')
+        service = self.serviceTree.getServiceFromName(service_name)
 
+        logging.debug('B')
         for server in service['servers']:
-
+            logging.debug('C')
             label = '<<table border="0" cellspacing="0">'
             label += f'<tr><td port="port0" border="1" bgcolor="white"><font color="black">{self.htmlEscape(server["name"])}</font></td></tr>'
             label += '</table>>'
 
-            g.node(service['name'], shape='none', label=label,
+            g.node(server['name'], shape='none', label=label,
                    URL=f"{self.serviceTree.itsmprepend}{server['id']}{self.serviceTree.itsmappend}")
 
         return g
@@ -144,7 +149,8 @@ class graphBuilder:
         """
         g = self.drawGraphObject(base_url)
 
-        logging.debug(g.source)
+        # logging.debug(g.source)
+        logging.debug(f"drawSVGGraph has base_url: {base_url}")
 
         result = g.pipe(format='svg').decode('utf-8')
 

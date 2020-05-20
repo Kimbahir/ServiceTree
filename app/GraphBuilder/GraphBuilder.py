@@ -65,7 +65,7 @@ class graphBuilder:
 
         return result
 
-    def drawGraphObject(self):
+    def drawGraphObject(self, base_url=""):
         g = Digraph(comment=self.serviceTree.name)
         now = datetime.now().strftime("%d-%m-%Y %H:%M")
         g.attr(
@@ -79,7 +79,7 @@ class graphBuilder:
             label = self.getHtmlTable(service)
 
             g.node(service['name'], shape='none', label=label,
-                   URL="https://github.com/Kimbahir/ServiceTree")
+                   URL=f"{base_url}/servicedetails/{service['name']}")
 
         for relation in self.serviceTree.relations:
             if relation['type'] == "vital":
@@ -91,14 +91,40 @@ class graphBuilder:
 
         return g
 
-    def drawGraphForWeb(self, format='pdf'):
+    def drawServiceDetails(self, service_name):
+        g = Digraph(comment=self.serviceTree.name)
+        now = datetime.now().strftime("%d-%m-%Y %H:%M")
+
+        service_label = self.serviceTree.getServiceLabelFromName(service_name)
+
+        g.attr(
+            'graph', label=f'[DEMO] {self.serviceTree.label} - Service: {service_label} - created on {now}')
+        g.attr('graph', fontname='verdana', fontsize='10')
+        g.attr('node', fontname='verdana', fontsize='12')
+        # g.attr(rankdir='TB')
+        g.attr(shape='circle')
+
+        service = self.serviceTree.services['service_name']
+
+        for server in service['servers']:
+
+            label = '<<table border="0" cellspacing="0">'
+            label += f'<tr><td port="port0" border="1" bgcolor="white"><font color="black">{self.htmlEscape(server["name"])}</font></td></tr>'
+            label += '</table>>'
+
+            g.node(service['name'], shape='none', label=label,
+                   URL=f"{self.serviceTree.itsmprepend}{server['id']}{self.serviceTree.itsmappend}")
+
+        return g
+
+    def drawGraphForWeb(self, format='pdf', base_url=""):
         """Draws the actual graph, based on the current service tree.
 
         Keyword Arguments:
             format {str} -- graphviz output format (default: {pdf})
         """
 
-        g = self.drawGraphObject()
+        g = self.drawGraphObject(base_url)
 
         logging.debug(g.source)
 
@@ -109,14 +135,29 @@ class graphBuilder:
         logging.debug('Data written')
         return b
 
-    def drawSVGGraph(self):
+    def drawSVGGraph(self, base_url=""):
         """Draws the actual graph, based on the current service tree.
 
         Returns:
             str -- Returns the SVG representation
 
         """
-        g = self.drawGraphObject()
+        g = self.drawGraphObject(base_url)
+
+        logging.debug(g.source)
+
+        result = g.pipe(format='svg').decode('utf-8')
+
+        return result
+
+    def drawSVGDetailGraph(self, service_name):
+        """Draws the actual graph, based on the current service tree.
+
+        Returns:
+            str -- Returns the SVG representation
+
+        """
+        g = self.drawServiceDetails(service_name)
 
         logging.debug(g.source)
 

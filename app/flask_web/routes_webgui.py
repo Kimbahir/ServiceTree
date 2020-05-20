@@ -134,7 +134,7 @@ def relate():
     g = graphBuilder()
     g.loadServiceTreeFromJSON(session['datastructure'])
 
-    chart_output = g.drawSVGGraph()
+    chart_output = g.drawSVGGraph(url_for('home'))
 
     services = []
     for s in g.serviceTree.services:
@@ -276,6 +276,20 @@ def download():
             flash("No valid format found", "danger")
 
     return render_template('download.html', form=form, title="Download"), 200
+
+
+@app.route("/servicedetail/<service_name>", methods=["GET"])
+def servicedetail(service_name):
+    if "datastructure" not in session.keys():
+        flash('Please load a datastructure before use', 'info')
+        return redirect(url_for('load')), 302
+
+    g = graphBuilder()
+    g.loadServiceTreeFromJSON(session['datastructure'])
+
+    chart_output = g.drawSVGDetailGraph(service_name)
+
+    return render_template('servicedetail.html', title=f"Service detail - {service_name}", chart_output=chart_output), 200
 
 
 @app.route("/viewonly", methods=["GET"])

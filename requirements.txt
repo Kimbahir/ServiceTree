@@ -5,3 +5,6 @@ flask
 flask_wtf
 wtforms
 flask_bcrypt
+redis
+flask-kvsession
+simplekv

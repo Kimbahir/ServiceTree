@@ -1,0 +1,70 @@
+{% extends "layout.html" %} {% block content %}
+<div class="content-section">
+
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <h1>Describe</h1>
+        <p>Read instructions below (especially for ITSM link fields)</p>
+        <div class="form-group">
+            <label for="servicelabel">Service tree label (shown on service tree):</label>
+            {{ form.servicelabel(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <label for="servicename">Service tree name (internal identification):</label>
+            {{ form.servicename(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <label for="customerid">Customer ID (internal identification):</label>
+            {{ form.customerid(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <label for="itsmstring">ITSM deeplink:</label>
+            <div class="input-group mb-3">
+                {{form.itsmprepend(class="form-control")}}
+                <div class="input-group-append">
+                    <span class="input-group-text" id="link">%SERVER-ID%</span>
+                </div>
+                {{form.itsmappend(class="form-control")}}
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+</div>
+<hr>
+<div class="content-section">
+    <strong>Instructions:</strong><br />
+    <p>
+        <em>Service tree label</em> is shown on the actual service tree as the user friendly name
+    </p>
+    <p>
+        <em>Service tree name</em> is never shown to end-users, but is available as an internal identificator
+    </p>
+    <p>
+        <em>Customer ID</em> is never shown to end-users, but is available as an internal identificator
+    </p>
+    <p>
+        <em>ITSM deeplink</em> is for allowing direct lookup into an ITSM system. The section before %SERVER-ID% is
+        the first part of the link and the section will be appended.
+    </p>
+    <blockquote>
+        <p>
+            <strong>Example 1:</strong><br>
+            The server id is 1234, and the direct lookup into the ITSM system is the following:<br>
+            <em>https://myitsm.com?serverid=</em>1234<em>?server=true</em><br>
+            Then the first section should be "<em>https://myitsm.com?serverid=</em>" and the second part be
+            "<em>?server=true</em>"
+        </p>
+        <p>
+            <strong>Example 2:</strong><br>
+            The server id is 1234, and the direct lookup into the ITSM system is the following:<br>
+            <em>https://myitsm.com/server/</em>1234<br>
+            Then the first section should be "<em>https://myitsm.com/server/</em>" and the second part be "" because it
+            is
+            empty
+        </p>
+    </blockquote>
+</div>
+
+{% endblock content %}

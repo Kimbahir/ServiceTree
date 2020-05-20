@@ -6,12 +6,14 @@ import logging
 
 
 class serviceTree:
-    def __init__(self, name, label, customerId=0) -> None:
+    def __init__(self, name, label, customerId=0, itsmprepend="", itsmappend="") -> None:
         self.services = []
         self.relations = []
 
         self.name = name
         self.label = label
+        self.itsmprepend = itsmprepend
+        self.itsmappend = itsmappend
         self.customerId = customerId
 
     def getServiceNameFromLabel(self, label):
@@ -74,6 +76,12 @@ class serviceTree:
         self.label = jsonInput['label']
         self.customerId = jsonInput['customerId']
 
+        try:
+            self.itsmprepend = jsonInput['itsmprepend']
+            self.itsmappend = jsonInput['itsmappend']
+        except:
+            pass
+
         logging.debug('Load from JSON: Core completed')
 
         self.services = jsonInput['services']
@@ -100,6 +108,8 @@ class serviceTree:
         root['name'] = self.name
         root['label'] = self.label
         root['customerId'] = self.customerId
+        root['itsmprepend'] = self.itsmprepend
+        root['itsmappend'] = self.itsmappend
 
         root['services'] = self.services
 

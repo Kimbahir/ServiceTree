@@ -6,7 +6,7 @@ from app.flask_web.examples import empty, example1, example2, example3
 import logging
 import json
 import os
-from app.flask_web.forms import HomeForm, LoadForm, PatchForm, RelateForm, DetachForm, DownloadForm
+from app.flask_web.forms import HomeForm, LoadForm, PatchForm, RelateForm, DetachForm, DownloadForm, DescribeForm
 from io import BytesIO
 from io import StringIO
 from app.flask_web import app
@@ -89,6 +89,38 @@ def patch():
         return redirect(url_for('home')), 302
     return render_template('patch.html', form=form, title='Patch'), 200
     # return "Service is running", 200
+
+
+@app.route("/describe", methods=["GET", "POST"])
+def describe():
+    if "datastructure" not in session.keys():
+        flash('Please load a datastructure before use', 'info')
+        return redirect(url_for('load')), 302
+
+    form = DescribeForm()
+
+    g = graphBuilder()
+    g.loadServiceTreeFromJSON(session['datastructure'])
+
+    if form.validate_on_submit():
+        g.serviceTree.name = form.servicename.data
+        g.serviceTree.label = form.servicelabel.data
+        g.serviceTree.customerId = form.customerid.data
+        g.serviceTree.itsmprepend = form.itsmprepend.data
+        g.serviceTree.itsmappend = form.itsmappend.data
+
+        session['datastructure'] = g.serviceTree.getServiceTreeAsJSON()
+        flash('Servicetree updated', 'success')
+        return redirect(url_for('describe')), 302
+
+    else:
+        form.servicename.data = g.serviceTree.name
+        form.servicelabel.data = g.serviceTree.label
+        form.customerid.data = g.serviceTree.customerId
+        form.itsmprepend.data = g.serviceTree.itsmprepend
+        form.itsmappend.data = g.serviceTree.itsmappend
+
+    return render_template('describe.html', form=form, title="Describe")
 
 
 @app.route("/relate", methods=["GET", "POST"])

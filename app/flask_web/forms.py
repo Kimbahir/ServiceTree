@@ -23,6 +23,15 @@ class LoadForm(FlaskForm):
     submit = SubmitField("Submit")
 
 
+class DescribeForm(FlaskForm):
+    servicelabel = StringField("Servicelabel", validators=[DataRequired()])
+    servicename = StringField("Servicename", validators=[DataRequired()])
+    customerid = StringField("Customer ID", validators=[DataRequired()])
+    itsmprepend = StringField("ITSM Prepend", validators=[Optional()])
+    itsmappend = StringField("ITSM Append", validators=[Optional()])
+    submit = SubmitField("Submit")
+
+
 class PatchForm(FlaskForm):
     csv = TextAreaField("csv", validators=[DataRequired()])
     clear = BooleanField("Clear all relations?")

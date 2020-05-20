@@ -1,19 +1,23 @@
-from flask import Flask, render_template, url_for, request, send_file, session, redirect, flash
+#import redis
+from flask import Flask
 from flask_bcrypt import Bcrypt
-from app.GraphBuilder import graphBuilder
-from app.flask_web.examples import empty, example1, example2
+from flask_kvsession import KVSessionExtension
+#from simplekv.memory.redisstore import RedisStore
+from simplekv.fs import FilesystemStore
 import logging
-import json
-import os
-from app.flask_web.forms import HomeForm, LoadForm, PatchForm, RelateForm, DetachForm
-from io import BytesIO
-from io import StringIO
+
+#store = RedisStore(redis.StrictRedis())
+store = FilesystemStore('./datastore')
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'df61f5fe12eb40792e85b284ead07d51'
 bcrypt = Bcrypt(app)
 
-logging.basicConfig(level=logging.DEBUG, format='%(levelname)s:\t%(message)s')
+#KVSessionExtension(store, app)
+KVSessionExtension(store, app)
+
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(levelname)s:\t%(message)s')
 
 from app.flask_web import routes_webgui
 from app.flask_web import routes_api

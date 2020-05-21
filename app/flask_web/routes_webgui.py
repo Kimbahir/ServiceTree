@@ -140,6 +140,8 @@ def relate():
     for s in g.serviceTree.services:
         services.append((s['name'], s['label']))
 
+    services.sort(key=lambda x: x[1])
+
     form.consumer.choices = services
 
     form.provider.choices = services
@@ -196,6 +198,8 @@ def detach():
         flash('Error in relations - please correct and reload', 'danger')
         return redirect(url_for('home')), 302
 
+    choices.sort(key=lambda x: x[1])
+
     form.relation.choices = choices
 
     logging.debug(
@@ -217,7 +221,7 @@ def detach():
 
         return redirect(url_for('detach')), 302
 
-    return render_template('detach.html', form=form, title="Relate", chart_output=chart_output), 200
+    return render_template('detach.html', form=form, title="Detach", chart_output=chart_output), 200
     # return "Service is running", 200
 
 
@@ -232,7 +236,7 @@ def view():
 
     chart_output = g.drawSVGGraph()
 
-    return render_template('view.html', title="Relate", chart_output=chart_output), 200
+    return render_template('view.html', title="View", chart_output=chart_output), 200
 
 
 @app.route("/download", methods=["GET", "POST"])

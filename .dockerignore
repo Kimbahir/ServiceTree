@@ -1,0 +1,11 @@
+.github/*
+.vscode/*
+tests/*
+venv/*
+.gitignore
+.dockerignore
+Dockerfile
+LICENSE
+README.md
+scratch.py
+servicetree.yaml

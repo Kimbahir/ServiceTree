@@ -3,12 +3,6 @@ kind: Deployment
 metadata:
   name: servicetree
   namespace: default
-  labels:
-    keel.sh/policy: force
-    keel.sh/trigger: poll
-    keel.sh/match-tag: "true"
-  annotations:
-    keel.sh/pollSchedule: "@every 1m"
 spec:
   replicas: 1
   selector:
@@ -36,19 +30,25 @@ spec:
   selector:
     app: servicetree
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: servicetree
   annotations:
-    kubernetes.io/ingress.class: "traefik"
-
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
+  tls:
+  - hosts:
+    - servicetree.bahir.dk
+    secretName: servicetree-bahir-dk-tls
   rules:
-  - host: servicetree.bahir.dk 
+  - host: servicetree.bahir.dk
     http:
       paths:
-      - path: /
+      - pathType: Prefix
+        path: "/"
         backend:
-          serviceName: servicetree
-          servicePort: http
+          service:
+            name: servicetree
+            port: 
+              number: 80

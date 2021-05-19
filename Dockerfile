@@ -1,14 +1,10 @@
 FROM python:latest
-RUN mkdir -p /src
+LABEL AUTHOR "Kim Bahir Andersen, kim@bahir.dk"
 WORKDIR /src
-COPY ./requirements.txt .
-COPY ./run-flask.py .
-COPY ./app ./app/
-COPY ./output ./output/
-COPY ./data ./data/
+COPY . .
 RUN apt-get update
 RUN apt-get -y --force-yes install graphviz
-RUN pip install -r requirements.txt
-ENTRYPOINT [ "python" ]
+RUN pip3 install -r requirements.txt
+ENTRYPOINT [ "python3" ]
 CMD ["run-flask.py"]
 EXPOSE 8000

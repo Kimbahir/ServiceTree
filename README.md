@@ -1,6 +1,6 @@
 # ServiceTree
 
-Purpose: To be able to build (somewhat interactive) service trees, without imposing on current database structure
+Purpose: To be able to build (somewhat interactive) service trees, without imposing on current database structure.
 
 Example:
 

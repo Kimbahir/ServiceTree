@@ -14,7 +14,7 @@ app.config['SECRET_KEY'] = 'df61f5fe12eb40792e85b284ead07d51'
 bcrypt = Bcrypt(app)
 
 #KVSessionExtension(store, app)
-KVSessionExtension(store, app)
+# KVSessionExtension(store, app)
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(levelname)s:\t%(message)s')

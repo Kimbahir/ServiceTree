@@ -266,7 +266,7 @@ def download():
             if g.serviceTree.label != "":
                 filename = f"{g.serviceTree.label}.json"
 
-            return send_file(b, as_attachment=True, attachment_filename=filename, mimetype='text/json')
+            return send_file(b, as_attachment=True, download_name=filename, mimetype='text/json')
         elif form.pdf.data:
             b = g.drawGraphForWeb()
             b.seek(0)
@@ -275,7 +275,7 @@ def download():
             if g.serviceTree.label != "":
                 filename = f"{g.serviceTree.label}.gv.pdf"
 
-            return send_file(b, as_attachment=True, attachment_filename=filename, mimetype='application/pdf')
+            return send_file(b, as_attachment=True, download_name=filename, mimetype='application/pdf')
         else:
             flash("No valid format found", "danger")
 
